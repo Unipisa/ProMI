@@ -1,14 +1,6 @@
 import argparse as ap
-from ast import parse
-from datetime import date
-from logging import exception, root
-from posixpath import split
-from re import S
 import sys
-import numpy as np 
 import os
-from datetime import date
-import subprocess
 import fileinput
 
 
@@ -23,6 +15,8 @@ def parseAgruments():
             required=True)
     parser.add_argument('-g', '--gmx', type=str, nargs='?', default='gmx', \
          help='Command to call gmx') 
+    parser.add_argument('-a', '--mmpbsa', type=str, nargs='?', default='gmx_mmpbsa', \
+         help='Command to call gmx_mmpbsa') 
     parser.add_argument('-d', '--debug', help="Print log to debug or not", action='store_true')
     return parser
 
@@ -253,7 +247,6 @@ def runCoupling(gmx, input, debug = False):
 
     os.system(' '.join(couple))
 
-
 def runEquilMD(gmx, nvtmdp, nptmdp, mdmdp, config, debug=False):
     if not os.path.isfile(nvtmdp):
         print("No mdp file for nvt equilibrium")
@@ -313,22 +306,6 @@ def runFit(gmx, input, debug=False):
         fit.extend(['<', input])    
     os.system(' '.join(fit))
 
-def processMMPBSA(rootpath, mmpbsa, debug=False):
-    input = os.path.join(rootpath, "Share", 'mmpbsa.in')
-    if not os.path.isfile(input):
-        print("There is no input file to run MMPBSA")
-        exit()
-
-    subfolders = os.scandir(rootpath)
-    
-    for subfolder in subfolders:
-        if subfolder.name[0] != '.' and subfolder.name != 'Share' and os.path.isdir(subfolder):
-            if debug:
-                print("Run MMPBSA in folder {}".format(subfolder.name))
-            mm = [mmpbsa, 'MPI', '-O', '-i', input, '-cs', 'md.tpr', '-ci', 'index.ndx', \
-                '-cg', '1', '13', '-ct', 'md_fit.xtc', '-cp', 'topol.top']
-            os.system(" ".join(mm))
-
 def processMD(rootpath, gmx, list_species, conf, debug=False):
     # Reading config files 
     ionmdp = os.path.join(rootpath, 'Share', 'ions.mdp')
@@ -373,10 +350,29 @@ def processMD(rootpath, gmx, list_species, conf, debug=False):
                     runNopbc(gmx, nopbcinput, debug)
                     runFit(gmx, fitinput, debug)
 
+def processMMPBSA(rootpath, mmpbsa, debug=False):
+    input = os.path.join(rootpath, "Share", 'mmpbsa.in')
+    if not os.path.isfile(input):
+        print("There is no input file to run MMPBSA")
+        exit()
+
+    subfolders = os.scandir(rootpath)
+    
+    for subfolder in subfolders:
+        if subfolder.name[0] != '.' and subfolder.name != 'Share' and os.path.isdir(subfolder):
+            os.chdir(subfolder)
+            if debug:
+                print("Run MMPBSA in folder {}".format(subfolder.name))
+                os.system('pwd')
+            
+            mm = [mmpbsa, 'MPI', '-O', '-i', input, '-cs', 'md.tpr', '-ci', 'index.ndx', \
+                '-cg', '1', '13', '-ct', 'md_fit.xtc', '-cp', 'topol.top', '-nogui']
+            os.system(" ".join(mm))
+
 def main():
     parser = parseAgruments()
     args= vars(parser.parse_args())
-    if len(args) < 3:
+    if len(args) < 4:
         parser.print_help()
     else:
         debug = args['debug']
@@ -422,6 +418,7 @@ def main():
         exit()
 
     processMD(absin, args['gmx'], list_species, conf, debug)
+    processMMPBSA(absin, args['mmpbsa'], debug)
 
                 
 if __name__ == "__main__":
