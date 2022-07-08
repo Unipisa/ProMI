@@ -17,7 +17,12 @@ def parseAgruments():
          help='Command to call gmx') 
     parser.add_argument('-a', '--mmpbsa', type=str, nargs='?', default='gmx_mmpbsa', \
          help='Command to call gmx_mmpbsa') 
+    parser.add_argument('-m', '--mode', type=int, nargs='?', default=3, \
+        help='Mode: 1 - compute MD simulation only, \
+            2 - compute MMPBSA only, \
+            3 - compute both MD and MMPBSA')
     parser.add_argument('-d', '--debug', help="Print log to debug or not", action='store_true')
+    
     return parser
 
 def readLigandFile(path, debug=False):
@@ -372,7 +377,7 @@ def processMMPBSA(rootpath, mmpbsa, debug=False):
 def main():
     parser = parseAgruments()
     args= vars(parser.parse_args())
-    if len(args) < 4:
+    if len(args) < 5:
         parser.print_help()
     else:
         debug = args['debug']
@@ -416,9 +421,20 @@ def main():
     if not list_species:
         print("Empty ligand information")
         exit()
+    if debug:
+        if args['mode'] == 1:
+            print("Compute MD simulation only")
+        if args['mode'] == 2:
+            print("Compute MMPBSA only")
+        if args['mode'] == 3:
+            print("Compute both MD simulation and MMPBSA")
 
-    processMD(absin, args['gmx'], list_species, conf, debug)
-    processMMPBSA(absin, args['mmpbsa'], debug)
+    if args['mode'] == 1 or args['mode'] == 3:
+        # print("Run MD")
+        processMD(absin, args['gmx'], list_species, conf, debug)
+    if args['mode'] == 2 or args['mode'] == 3:
+        processMMPBSA(absin, args['mmpbsa'], debug)
+        # print("Run MMPBA")
 
                 
 if __name__ == "__main__":
