@@ -2,10 +2,9 @@ import argparse as ap
 from ast import parse
 from datetime import date
 from logging import exception
-import numpy as np 
 import os
 from datetime import date
-import subprocess
+import subprocess as sp 
 
 
 def parseAgruments():
@@ -61,6 +60,7 @@ def main():
             if debug:
                 print("The ChimeraX file is at {}".format(abschi))
 
+        # this block is for run chimera from my macbook
         os.chdir('/') # go to root directory of the machine
         if debug:
             print("Current directory is {}".format(os.getcwd()))
@@ -69,6 +69,7 @@ def main():
             if debug:
                 print('Output directory is not exist, create one')
             os.mkdir(absout)
+        # os.system('/usr/bin/chimerax -h')
         # start processing 
         contents = os.scandir(absin)
         for content in contents:
@@ -83,7 +84,8 @@ def main():
                     # write command line .cxc file for ChimeraX
                     # store in the subfolder of the mutated structure
                     if not os.path.isdir(os.path.join(str(absout), str(content.name))):
-                        print('Create subfolder {} for output'.format(os.path.join(str(absout), str(content.name))))
+                        if debug:
+                            print('Create subfolder {} for output'.format(os.path.join(str(absout), str(content.name))))
                         os.mkdir(os.path.join(str(absout), str(content.name)))
                     
                     filecontent = 'mmaker #2 to #1 \n'
@@ -101,9 +103,12 @@ def main():
                         print("Wrote cxc file {}".format(filename))
                     # calling ChimeraX to align file with the pdb model.
                     command = ['.' + abschi, '--nogui', '--silent' ,abspdb, str(rank0), filename]
+                    # command = [abschi, '--nogui', '--silent' ,abspdb, str(rank0), filename]
+
                     if debug:
                         print(' '.join(command))
                     os.system(' '.join(command))
+                    
 
                 
 if __name__ == "__main__":

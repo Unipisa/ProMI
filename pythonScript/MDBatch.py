@@ -1,4 +1,5 @@
 import argparse as ap
+from logging import exception
 import sys
 import os
 import fileinput
@@ -170,8 +171,107 @@ def modifyGro(path, list_species, debug=False):
     # print(comlines)
     with open('com.gro', 'w') as fw:
         fw.write(''.join(comlines))
+    
+def parseLine(line, debug=False):
+    key = str(line[0:6]).strip()
+    id = int(''.join(line[6:11]))
+    atom = str(line[11:17]).strip()
+    name = str(line[17:21]).strip()
+    chain = str(line[21:22]).strip()
+    resid = int(line[22:26])
+    if key != 'TER':
+        x = float(line[26:38])
+        y = float(line[38:46])
+        z = float(line[46:54])
+        a = float(line[54:60])
+        b = float(line[60:66])
+        kind = str(line[66:len(line)])
+    else:
+        x, y, z, a, b = 0, 0, 0, 0, 0
+        kind = ''
 
-def runPdb2gmx(gmx, pdbfile, config, debug=False):
+    if debug:
+        print(key, id, atom, name, chain, resid, x, y, z, a, b, kind)
+    linedict = {'key': key, \
+        'aid': id, 'atom': atom, 'name': name, \
+        'chain': chain, 'rid': resid, \
+        'line': line}
+    return linedict
+
+def runPdb2gmx(rootpath, gmx, pdbfile, config, debug=False):
+    # add ions here if needed 
+    if os.path.isfile(os.path.join(rootpath, "Share", 'ions.txt')):
+        if debug:
+            print("There are some ions to add to the .pdb file")
+        fions = open(os.path.join(rootpath, 'Share', 'ions.txt'), 'r')
+        ionslines = fions.readlines()
+        fpdb = open(pdbfile, 'r')
+        pdblines = fpdb.readlines()
+        fpdb.close()
+
+        # find the position to insert 
+        pos = len(pdblines) - 1
+        ister = False
+        for i in range(len(pdblines) - 1, -1, -1):
+            if 'TER' in pdblines[i]:
+                ister = True
+            if 'ATOM' in pdblines[i] or 'TER' in pdblines[i]:
+                pos = i
+                if pdblines[i][-1] != '\n':
+                    pdblines[i] += '\n'
+                break 
+
+        if not ister: # in case if there is no TER line, add TER line
+            lastatom = pdblines[pos]
+            linedict = parseLine(lastatom)
+            terline = "TER  "
+            for j in range(6 - len(str(linedict['aid']+1))):
+                terline += ' '
+            terline += str(linedict['aid']+1)
+            terline += '      '
+            terline += linedict['name']
+            terline += ' '
+            terline += linedict['chain']
+            for j in range(4 - len(str(linedict['rid']))):
+                terline += ' '
+            terline += str(linedict['rid'])
+            terline += '\n'
+            pdblines.insert(pos+1, terline)
+            pos += 1
+            
+        lastline = pdblines[pos]
+        lastlinedict = parseLine(lastline)
+        lastid = lastlinedict['aid']
+
+        addedline = 0
+        for ionline in ionslines:
+            if 'HETATM' in ionline: 
+                # need to modify the id of the ions to be consistent with atom lines
+                iondict = parseLine(ionline)
+                ionid = iondict['aid']
+                if len(str(ionid)) == len(str(lastid + 1)):
+                    ionline = ionline.replace(str(ionid), str(lastid+1), 1)
+                elif len(str(ionid)) < len(str(lastid+1)):
+                    todelete = ''
+                    for j in range(len(str(lastid+1)) - len(str(ionid))):
+                        todelete += ' '
+                    todelete += str(ionid)
+                    ionline = ionline.replace(todelete, str(lastid+1), 1)
+                else: # len(str(ionid)) > len(str(lastid+1))
+                    toadd = ''
+                    for j in range(len(str(ionid))-len(str(lastid+1))):
+                        toadd += ' '
+                    toadd += str(lastid+1)
+                    ionline = ionline.replace(str(ionid), toadd, 1)
+                pdblines.insert(pos + addedline + 1, ionline)
+                addedline += 1
+                lastid += 1
+
+        fpdb = open(pdbfile, 'w')
+        fpdb.write(''.join(pdblines))
+        fpdb.close() 
+
+
     optPdb2gmx = config['pdb2gmx'].split()
     command = [gmx, 'pdb2gmx', '-f', pdbfile, '-o', 'protein.gro'] 
     command.extend(optPdb2gmx)
@@ -342,7 +442,8 @@ def processMD(rootpath, gmx, list_species, conf, debug=False):
                         print("Current directory is: {}".format(os.getcwd()))
 
                     # Run pdb2gmx
-                    runPdb2gmx(gmx, file.name, conf, debug)
+                    runPdb2gmx(rootpath, gmx, file.name, conf, debug)
+                    
                     # add ligand into the com.gro files 
                     modifyTopol('topol.top', list_species, debug) # command this for test 
                     modifyGro('protein.gro', list_species, debug)
@@ -354,6 +455,7 @@ def processMD(rootpath, gmx, list_species, conf, debug=False):
                     runEquilMD(gmx, nvtmdp, nptmdp, mdmdp, conf, debug)
                     runNopbc(gmx, nopbcinput, debug)
                     runFit(gmx, fitinput, debug)
+                    
 
 def processMMPBSA(rootpath, mmpbsa, debug=False):
     input = os.path.join(rootpath, "Share", 'mmpbsa.in')
