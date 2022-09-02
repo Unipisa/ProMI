@@ -1,6 +1,7 @@
 import argparse as ap
 import numpy as np 
 import os
+import re
 
 
 def parseAgruments():
@@ -47,9 +48,9 @@ def readFasta(path, debug=False):
     if debug: 
         print(seqs)
     return seqs 
-            
+        
 
-def parseMutationLine(line, debug=False): # format new_aa start_pos stop_pos seq_id 
+def parseRangeMutation(line, debug=False): # format new_aa start_pos stop_pos seq_id 
     words = line.split()
     newaa = words[0]
     start = int(words[1])
@@ -62,14 +63,70 @@ def parseMutationLine(line, debug=False): # format new_aa start_pos stop_pos seq
         print("Mutation {} {} {} {}".format(newaa, start, stop, seq_id + 1))
     return [newaa, start, stop, seq_id]
 
+def writeNewFile(fastas, fullname, debug=False):
+    outfile = open(fullname, 'w')
+    for fasta in fastas:
+        outfile.write(fasta['description']) 
+        outfile.write('\n')
+        outfile.write(fasta['sequence'])
+        outfile.write('\n')
+    outfile.close()
 
-def parseMutationFile(path, debug=False):
+def genPointMutation(fastas, outpath, line, debug=False): # each line is one mutated fasta file. 
+    changes = line.split(';')
+    name = ''
+    new_fastas = fastas.copy()
+
+    for change in changes: # each mutation is in the form like 1_A45B 
+        change = change.strip()
+        parts = change.split('_')
+        seqid = int(parts[0]) - 1 # the id in the input file starts at 1 while the index in code starts at 0 
+        
+        if seqid >= len(new_fastas):
+            print("There are only {} sequences, \
+                meanwhile the sequence index is {}".format(len(new_fastas), seqid))
+
+        fasta = new_fastas[seqid].copy() # fasta is now a dictionary with 2 keys of one sequence 
+        seq = list(fasta['sequence']) # seq is now list of characters  
+
+        mut = parts[1]
+        pos = re.findall(r'\d+', mut)
+        if len(pos) != 1:
+            print('Wrong mutation {}'.format(mut))
+        pos = int(pos[0])
+        aas = mut.split(str(pos))
+        pos  -= 1 
+        src = aas[0] 
+        des = aas[1] 
+        if debug:
+            print("Consider the mutations: {} {} {}".format(src, pos + 1, des)) 
+
+        if seq[pos] != src:
+            print("The original amino acid at position \
+                {} is not {} but {}".format(pos + 1, src, seq[pos]))
+
+        seq[pos] = des # change the amino acid here 
+        seq = ''.join(seq) # now seq is a string 
+        new_des = fasta['description']
+        new_des += str(parts[1])
+        name += str(parts[1])
+        new_fastas[seqid] = {'sequence': seq, 'description':  new_des}
+
+    fullname = os.path.join(outpath, name + '.fasta')
+    writeNewFile(new_fastas, fullname, debug)
+
+def parseMutationFile(path, fastas, outpath, debug=False):
     f = open(path, 'r')
     lines = f.readlines()
     muts = []
     for line in lines:
-        mut = parseMutationLine(line, debug)
-        muts.append(mut)
+        if 'range' in line:
+            line = line.split(':')[1].strip()
+            mut = parseRangeMutation(line, debug)
+            muts.append(mut)
+        if 'point' in line:
+            line = line.split(':')[1].strip()
+            genPointMutation(fastas, outpath, line, debug)
     return muts 
 
 def writeNewFile(fastas, fullname, debug=False):
@@ -81,8 +138,7 @@ def writeNewFile(fastas, fullname, debug=False):
         outfile.write('\n')
     outfile.close()
 
-
-def genMutationFiles(fastas, muts, outpath, debug=False): # start counts from 1
+def genRangeMutations(fastas, muts, outpath, debug=False): # start counts from 1
     for mut in muts:
         seq_id = mut[3]
         fasta = fastas[seq_id].copy()
@@ -127,15 +183,8 @@ def main():
         seqs = readFasta(args['fasta'], debug)
         if len(seqs) <= 0:
             return
-        muts = parseMutationFile(args['mutations'], debug)
-        genMutationFiles(seqs, muts, args['outpath'], debug)
-
-    
-
-    
-
-
+        muts = parseMutationFile(args['mutations'], seqs, args['outpath'], debug)
+        genRangeMutations(seqs, muts, args['outpath'], debug)
 
 if __name__ == "__main__":
     main()
-    

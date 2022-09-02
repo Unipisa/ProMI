@@ -16,10 +16,18 @@ def parseAgruments():
         help='Path of output directory', required=True)
     parser.add_argument('-a', '--alphafold', type=str, nargs='?', \
          help='Path of alphafold directory (root directory)', required=True)
+
     today = date.today()
     todaystr = today.strftime("%Y-%m-%d")
+    
     parser.add_argument('-t', '--templatedate', type=str, nargs='?', \
-        help='Max template date for predicting protein structure, default = ' + todaystr, default=todaystr)
+        help='Max template date for predicting protein structure, \
+            default = ' + todaystr, default='2003-05-05')
+
+    
+    # parser.add_argument('-t', '--templatedate', type=str, nargs='?', \
+    #     help='Max template date for predicting protein structure, \
+    #         default = ' + todaystr, default=todaystr)
     parser.add_argument('-s', '--datadir', type=str, nargs='?', \
         help='Directory to the data folder, default = /data/genetic_databases/', default='/data/genetic_databases/')
     parser.add_argument('-m', '--modelpreset', type=str, nargs='?', \

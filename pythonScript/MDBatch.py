@@ -120,7 +120,7 @@ def modifyTopol(path, list_species, debug=False):
             for species in list_species:
                 new_lines += '#include "'
                 new_lines += species['itp'] + '"\n'
-                new_lines += "#ifdef LIG_POSRES\n"
+                new_lines += "#ifdef POSRES\n"
                 new_lines += '#include "'
                 new_lines += species['posre'] + '"\n'
                 new_lines +=  "#endif\n\n"

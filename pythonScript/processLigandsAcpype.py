@@ -34,9 +34,10 @@ def main():
         if debug:
             print("The working directory is: {}".format(absin))
         # check if the paths are correct 
-        if not os.path.isdir(absin) or '.acpype' not in absin:
-            print("The input folder is not correct")
-            exit()
+        if os.path.isdir(absin):
+            if '.acpype' not in str(absin):
+                print("The input folder is not correct")
+                exit()
 
         # start processing 
         contents = os.listdir(absin)

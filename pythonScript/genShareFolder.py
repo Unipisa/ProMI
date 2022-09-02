@@ -24,9 +24,14 @@ def parseAgruments():
 
 # read meta data and save config file from the provided information 
 def parseMetaFile(metapath, outpath, debug=False):
+    if not os.path.isdir(outpath):
+        if debug:
+            print("Creating output path")
+        os.mkdir(outpath)
     meta = {'type': 'homo', 'ff': 'amber', 'num_chain': 1, 'lig': '', \
-        'ff_name': "amber99sb", 'water': 'tip3p', 'bt': "dodecahedron", \
-        'p_name': "NA", 'n_name': "CL"} # default meta data 
+        'ff_name': "amber99", 'water': 'tip3p', 'bt': "dodecahedron", \
+        'p_name': "NA", 'n_name': "CL", 'sim_step': 2000000, \
+        'data_dir': '/data/genetic_databases/'} # default meta data 
     if not os.path.isfile(metapath):
         print("The path of the pdb file is not correct")
         exit()
@@ -266,6 +271,7 @@ def separateLigands(prodict, ligdict, metadict, ionsdict, outpath, datapath, deb
     ligfilelines.append('../Share/' + consider + '.acpype/' + consider + '_fix.itp\n')
     ligfilelines.append('../Share/' + consider + '.acpype/' + consider + '_fix.prm\n')
     ligfilelines.append('../Share/' + consider + '.acpype/' + 'posre_' + consider + '.itp\n')
+
     # add other ligand 
     for lig in liginfor['ligands'].keys():
         if lig != consider: # already add considered ligand above
@@ -296,7 +302,7 @@ def separateLigands(prodict, ligdict, metadict, ionsdict, outpath, datapath, deb
         ionsfileline = [str(len(liginfor['ions'].keys())) + '\n']
         for ionid in ionscons:
             ionsfileline.extend(ionscons[ionid])
-            
+
         ionfile = open(os.path.join(outpath, 'Share', 'ions.txt'), 'w')
         ionfile.write(''.join(ionsfileline))
         ionfile.close()
@@ -376,11 +382,14 @@ def separateLigands(prodict, ligdict, metadict, ionsdict, outpath, datapath, deb
             if 'tc-grps' in mdline:
                 mdline = mdline.replace('Protein_Ligands', group1)
                 mdlines[mdid] = mdline.replace('Water_and_ions', group2)
+            if 'nsteps' in mdline:
+                newline = 'nsteps           = ' + str(metadict['sim_step']) + '   ;\n'
+                mdlines[mdid] = newline
         fmd = open(os.path.join(outpath, 'Share', 'md.mdp'), 'w')
         fmd.write(''.join(mdlines))
         fmd.close()
     else:
-        print("Cannot file npt.mdp file in the data folder")
+        print("Cannot find npt.mdp file in the data folder")
 
     # copy em.mdp and ions.mdp from data to Share directory
     emtar = os.path.join(datapath, 'em.mdp')
@@ -407,7 +416,7 @@ def separateLigands(prodict, ligdict, metadict, ionsdict, outpath, datapath, deb
 
     return savedlig
 
-# Run ChimeraX container to add Hydrogen to ligands 
+# Run Chimera container to add Hydrogen to ligands 
 def processLigand(savedlig, outpath, chipath, debug=False):
     # All the file need to be process by chimera and acpype will be in "Share" folder
     # get current directory to be able to change back 
@@ -416,20 +425,23 @@ def processLigand(savedlig, outpath, chipath, debug=False):
     shareabs = os.path.abspath (os.path.join(outpath, "Share"))
 
     acpypefile = '#!/bin/sh\n'
-    acpypefile += 'WS=/tmp/workspace/\n'
+    acpypefile += 'WS=/tmp/workspace/\n' # starting folder of docker container
     acpypefile += 'cd $WS\n'
+    
 
     os.chdir("/") # cd to the root folder in case of macos
     for lig in savedlig:
         if debug:
-            print("Adding hydrogen to ligand {}".format(lig))
+            print("Adding hydrogen to the ligand {}".format(lig))
         ligpath = shareabs + '/' + lig
+        # cxcfile = 'minimize nogui true\n'
+        # cxcfile += 'write format pdb  #0 ' +  ligpath +' \n'
         cxcfile = 'addh\n'
-        cxcfile += 'save ' + ligpath + " models #1\n"
-        cxcfile += 'exit\n'
+        cxcfile += 'write format pdb #0 ' + ligpath + '\n'
+        cxcfile += 'stop\n'
         # if debug:
         #     print(cxcfile)
-        cxcpath = os.path.join(shareabs, 'add_hydrogen.cxc')
+        cxcpath = os.path.join(shareabs, 'add_hydrogen.cmd')
         f = open(cxcpath, 'w')
         f.write(cxcfile)
         f.close()

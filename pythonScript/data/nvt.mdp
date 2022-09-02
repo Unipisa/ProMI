@@ -1,5 +1,5 @@
 title                   = Protein-ligand complex NVT equilibration 
-define                  = -DPOSRES -DLIG_POSRES  ; position restrain the protein and ligand
+define                  = -DPOSRES ; position restrain the protein and ligand
 ; Run parameters
 integrator              = md        ; leap-frog integrator
 nsteps                  = 50000     ; 2 * 50000 = 100 ps
