@@ -19,10 +19,10 @@ def parseAgruments():
 
     today = date.today()
     todaystr = today.strftime("%Y-%m-%d")
-    
+
     parser.add_argument('-t', '--templatedate', type=str, nargs='?', \
         help='Max template date for predicting protein structure, \
-            default = ' + todaystr, default='2003-05-05')
+            default = ' + todaystr, default='2003-05-20')
 
     
     # parser.add_argument('-t', '--templatedate', type=str, nargs='?', \

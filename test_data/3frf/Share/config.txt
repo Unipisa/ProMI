@@ -1,0 +1,4 @@
+pdb2gmx: -ff amber03 -water tip3p -ignh
+edifconf: -bt dodecahedron -d 1.0
+genion: -pname NA -nname CL
+grompp: -maxwarn 50

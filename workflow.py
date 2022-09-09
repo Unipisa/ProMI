@@ -28,8 +28,8 @@ def parseAgruments():
         help='Path to alphafold folder', \
         required=True)
     parser.add_argument('-c', '--docker', type=str, nargs='?', \
-        help='Name of the docker image of chimera_gmxmmpbsa', \
-        default='chimera_gmxmmpbsa')
+        help='Name of the docker image of workflow', \
+        default='workflow')
     parser.add_argument('-l', '--acpype', type=str, nargs='?', \
         help='Name of the docker image of acpype', \
         default='acpype/acpype')
@@ -47,7 +47,7 @@ def genMutation(fasta, mutfile, outpath, debug=False):
     if debug:
         print('\n\n')
 
-def genShareFolder(metafile, pdbfile, rootpath, datafolder, debug=False):
+def genShareFolder(metafile, pdbfile, rootpath, datafolder, dockername, debug=False):
     if debug:
         print('GENERATE SHARE FOLDER')
     # need to generate an sh file and then run a docker container to run it
@@ -105,7 +105,7 @@ def genShareFolder(metafile, pdbfile, rootpath, datafolder, debug=False):
     comchmod = 'docker run --gpus all --rm --user $(id -u):$(id -g) --mount src=' 
     comchmod += rootpath + ','
     comchmod += 'target=/tmp/workspace,type=bind '
-    comchmod += 'chimera_gmxmmpbsa '
+    comchmod += dockername + ' '
     comchmod += 'chmod +x /tmp/workspace/run_genShare.sh'
     if debug:
         print(comchmod)
@@ -114,7 +114,7 @@ def genShareFolder(metafile, pdbfile, rootpath, datafolder, debug=False):
     comrun = 'docker run --gpus all --rm --user $(id -u):$(id -g) --mount src=' 
     comrun += rootpath + ','
     comrun += 'target=/tmp/workspace,type=bind '
-    comrun += 'chimera_gmxmmpbsa '
+    comrun += dockername + ' '
     comrun += '/tmp/workspace/run_genShare.sh'
     if debug:
         print(comrun)
@@ -399,14 +399,13 @@ def main():
 
         metadic = parseMetaFile(args['input'], debug)
 
-        
-
         if debug:
             print('\n\n')
 
         genMutation(args['fasta'], args['mutation'], fastapath, debug)
         predictBatch(metadic, fastapath, alphares, args['alphafold'], metadic['data_dir'], debug)
-        sharepath = genShareFolder(args['input'], args['pdb'], rootpath, 'pythonScript/data', debug)
+        sharepath = genShareFolder(args['input'], args['pdb'], rootpath, \
+            'pythonScript/data', args['docker'], debug)
 
         sharepath = os.path.join(rootpath, 'md', 'Share')
         runAcpype(sharepath, args['acpype'], debug)

@@ -1,0 +1,22 @@
+# type of protein, can only be one of the following: monomer, homo, complex
+type 				= mono
+# number of chain
+num_chain 			= 1
+# force field family, only support amber at this moment 
+ff 					= amber
+# name of ligand of interest 
+lig 					= PFB
+# name of the force field, choose between: amber03, amber94, amber96, amber99, amber99sb, amber99sb-ildn, ambergs
+ff_name				= amber99
+# name of the water model 
+water 				= tip3p
+# box type, choose between: triclinic, cubic, dodecahedron, octahedron
+bt		 			= dodecahedron
+# Positive charge name 
+p_name				= NA
+# Negative charge name
+n_name				= CL
+# number of simulation steps, this determines the time of the simulation time (ns) = sim_step*0.002/1000 
+sim_step				= 2000000
+# data directory
+data_dir 			= /data/genetic_databases/

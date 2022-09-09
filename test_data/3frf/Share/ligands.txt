@@ -1,0 +1,15 @@
+2
+=============
+XCF
+1
+../Share/XCF.acpype/XCF_fix.gro
+../Share/XCF.acpype/XCF_fix.itp
+../Share/XCF.acpype/XCF_fix.prm
+../Share/XCF.acpype/posre_XCF.itp
+=============
+NDP
+1
+../Share/NDP.acpype/NDP_fix.gro
+../Share/NDP.acpype/NDP_fix.itp
+../Share/NDP.acpype/NDP_fix.prm
+../Share/NDP.acpype/posre_NDP.itp

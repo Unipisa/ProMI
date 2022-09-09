@@ -1,0 +1,3 @@
+point: 1_K54R; 1_K108N
+point: 1_L99V; 1_L103I; 1_V146M
+point: 1_K54K

@@ -3,7 +3,7 @@
 # Set some environment variables 
 WS=/tmp/workspace/
 
-cd $WS/HIV_PROTEASE_1/MD/V82N/
+cd $WS/MD/1hknew
 
 echo "The working directory is:"
 pwd
@@ -17,10 +17,13 @@ export PATH="$GMX/bin:$PATH"
 
 echo $PATH
 
+# rm -rf 1HK1
+# rm -rf 1HK2 
+# rm -rf 1HK3
 
 # /tmp/amber20/miniconda/bin/gmx_MMPBSA MPI -O -i mmpbsa.in -cs md.tpr -ci index.ndx -cg 1 13 -ct md_fit.xtc  -cp topol.top 
 
-/tmp/amber20/miniconda/bin/gmx_MMPBSA -h
-gmx_mpi -h 
+# /tmp/amber20/miniconda/bin/gmx_MMPBSA -h
+# gmx_mpi -h 
 
 exit;

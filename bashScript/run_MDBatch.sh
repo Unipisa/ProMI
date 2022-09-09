@@ -12,7 +12,6 @@ export PATH="$GMX/bin:$PATH"
 
 cd $WS/scripts/pythonScript
 
-python3 MDBatch.py -f $WS/MD/ALDOSE -g gmx_mpi -a /tmp/amber20/miniconda/bin/gmx_MMPBSA -m 2 -d
-
+python3 MDBatch.py -f $WS/MD/1HK -g gmx_mpi -a /tmp/amber20/miniconda/bin/gmx_MMPBSA -m 3 -d
 
 exit;

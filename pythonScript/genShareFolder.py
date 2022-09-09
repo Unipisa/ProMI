@@ -97,6 +97,8 @@ def parseLine(line, debug=False):
 
 
 def getLigands(pdbpath, debug=False):
+    if debug:
+        print("GET LIGAND")
     if not os.path.isfile(pdbpath):
         print("The path of the pdb file is not correct")
         exit()
@@ -154,6 +156,8 @@ def getLigands(pdbpath, debug=False):
 # Create one file for each ligand and then add hydrogen by calling chimera     
 # Also prepare coupling group for .mdp files 
 def separateLigands(prodict, ligdict, metadict, ionsdict, outpath, datapath, debug=False):
+    if debug:
+        print("SEPARATE LIGAND")
     # get the infor from the metadata dictionary 
     num_chain = metadict['num_chain']
     consider = metadict['lig']
@@ -416,6 +420,42 @@ def separateLigands(prodict, ligdict, metadict, ionsdict, outpath, datapath, deb
 
     return savedlig
 
+
+def addHydrogen(savedlig, outpath, debug=False):
+    print("=========ADD HYDROGEN===========")
+    curdir = os.getcwd()
+    # Get absolute path of "Share" folder 
+    shareabs = os.path.abspath (os.path.join(outpath, "Share"))
+
+    acpypefile = '#!/bin/sh\n'
+    acpypefile += 'WS=/tmp/workspace/\n' # starting folder of docker container
+    acpypefile += 'cd $WS\n'
+    
+    for lig in savedlig:
+        if debug:
+            print("Adding hydrogen to the ligand {}".format(lig))
+        ligpath = shareabs + '/' + lig
+        comrun = ['/tmp/miniconda3/bin/obabel', ligpath, '-O', ligpath, '-h'] 
+        if debug:
+            print(' '.join(comrun))
+
+        os.system(' '.join(comrun))
+
+        acpypefile += 'acpype -f -i ' + lig + ' -o gmx -d\n'
+
+
+    facname = os.path.join(shareabs, "run_acpype.sh")
+    fac = open(facname, 'w')
+    fac.write(acpypefile)
+    fac.close()
+    
+    os.chdir(curdir)
+    if debug:
+        print("The current directory is {}".format(curdir))
+    print("=========DONE ADD HYDROGEN===========")
+
+
+
 # Run Chimera container to add Hydrogen to ligands 
 def processLigand(savedlig, outpath, chipath, debug=False):
     # All the file need to be process by chimera and acpype will be in "Share" folder
@@ -434,10 +474,10 @@ def processLigand(savedlig, outpath, chipath, debug=False):
         if debug:
             print("Adding hydrogen to the ligand {}".format(lig))
         ligpath = shareabs + '/' + lig
-        # cxcfile = 'minimize nogui true\n'
-        # cxcfile += 'write format pdb  #0 ' +  ligpath +' \n'
-        cxcfile = 'addh\n'
-        cxcfile += 'write format pdb #0 ' + ligpath + '\n'
+        cxcfile = 'minimize nogui true\n'
+        cxcfile += 'write format pdb  #0 ' +  ligpath +' \n'
+        # cxcfile = 'addh\n'
+        # cxcfile += 'write format pdb #0 ' + ligpath + '\n'
         cxcfile += 'stop\n'
         # if debug:
         #     print(cxcfile)
@@ -551,7 +591,8 @@ def main():
         ionsdict = {}
 
     savedlig = separateLigands(prodict, ligdict, metadict, ionsdict, args['outpath'], args['data'], debug)
-    processLigand(savedlig, args['outpath'], args['chimera'], debug)
+    # processLigand(savedlig, args['outpath'], args['chimera'], debug)
+    addHydrogen(savedlig, args['outpath'], debug)
     genInputGmx(args['outpath'], debug)
 
 if __name__ == "__main__":
