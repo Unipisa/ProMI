@@ -315,7 +315,7 @@ def runMDBatch(rootpath, image, debug=False):
     rootabs = os.path.abspath(rootpath) 
     bind = 'src=' + rootabs + ',target=/tmp/workspace,type=bind'
     comchmod = ['docker', 'run', '--gpus', 'all', '--rm', '--user', '$(id -u):$(id -g)', \
-        '=--mount', bind, image, 'chmod', '+x', '/tmp/workspace/run_MD.sh']
+        '--mount', bind, image, 'chmod', '+x', '/tmp/workspace/run_MD.sh']
     if debug:
         print(' '.join(comchmod))
     os.system(' '.join(comchmod))
