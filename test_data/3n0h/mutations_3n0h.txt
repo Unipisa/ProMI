@@ -1,2 +1,0 @@
-point: 1_S35K
-point: 1_S35S

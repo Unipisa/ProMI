@@ -1,2 +1,0 @@
-point: 1_A16V ; 1_S108T
-point: 1_S108S

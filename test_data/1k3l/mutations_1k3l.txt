@@ -1,2 +1,0 @@
-point: 1_I218A
-point: 1_I218I

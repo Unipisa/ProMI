@@ -1,2 +1,0 @@
-point: 1_V292T
-point: 1_V292V

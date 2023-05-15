@@ -1,3 +1,0 @@
-point: 1_F93A
-point: 1_F93F
-range: F 57 60 1

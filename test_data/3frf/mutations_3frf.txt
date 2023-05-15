@@ -1,2 +1,0 @@
-point: 1_F98Y
-point: 1_F98F

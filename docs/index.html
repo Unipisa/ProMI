@@ -5,20 +5,91 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>MPL</title>
-        <script src="DataVisualization/lib/d3.js"></script>
+        <link rel="stylesheet" href="style.css">
+        <!-- <script src="lib/d3.js"></script> -->
     </head>
 
     <body>
-        <div id ='introdiv' style="background-color:#ffffff;">
-            
-            <h1>
-                Mutated protein - ligand binding affinity!
+        <!-- <canvas id = "mycanvas" width = "1200" height="900" style="top:30px;left:0px" display="inline">
+        </canvas> -->
+        <div id ='introdiv' class ="introdiv" style="background-color:#ffffff; text-align: center;">
+            <h1 class="title">
+                Computational estimation of the impact of mutations on protein-ligand affinity based on Alphafold and MD simulation
             </h1>
-            <h2>
+            <h2 style="font-size:18px; text-align: center;">
                 University of Pisa
             </h2>
-            <br>
-            <br>
+            <br></br>
+            <h2 style="font-size:18px; text-align: center;">
+                ***In progress***
+            </h2>
+        </div>
+        <div id = 'workflowdiv' style="background-color:#ffffff;">
+            <h1 class ="section" >
+                1. Workflow
+            </h1>
+            <div class="container">
+                <h1 class="level-1 rectangle">Generate amino acid sequence of mutation proteins from the FASTA file 
+                    of wt protein retrieved from  <a href="https://www.rcsb.org">Protein Data Bank</a></h1>
+                <h1 class="level-1 rectangle">Predict the 3D structure of the proteins by AlphaFold2</h1>
+                <h1 class="level-1 rectangle">Fix protonation state of 3D structures by <a href="http://newbiophysics.cs.vt.edu/H++/hppdetails.php">H++ server</a> </h1>
+                <h1 class="level-1 rectangle">Align the predicted structures with the crystallographic model by Chimera</h1>
+                <h1 class="level-1 rectangle">Separate ligand(s) from crystallographic structures and add hydrogens with Obabel then prepare with GAFF2</h1>
+                <h1 class="level-1 rectangle">Convert pdb file of predicted protein structures in isolation to .gro format</h1>
+                <h1 class="level-1 rectangle">Assemble protein and ligand</h1>
+                <h1 class="level-1 rectangle" style="width:40%">MDS
+                    <div>
+                        <h2 class="level-2 rectangle">Solvate</h2>
+                        <h2 class="level-2 rectangle">Neutralize by adding Na+ or Cl-</h2>
+                        <h2 class="level-2 rectangle">Minimize energy</h2>
+                        <h2 class="level-2 rectangle">NVT for 1ns</h2>
+                        <h2 class="level-2 rectangle">NPT for 1ns</h2>
+                        <h2 class="level-2-end rectangle">Simulate for 15ns</h2>
+                    </div>
+                </h1>
+                <h1 class="level-1 rectangle">Compute binding free energy by gmx_MMPBSA</h1>
+                <h1 class="level-1-end rectangle">Exclude outlier(s) and compute the average</h1>
+            </div>
+              
+              <footer class="page-footer">
+                <span>made by </span>
+                <a href="https://georgemartsoukos.com/" target="_blank">
+                  <img width="24" height="24" src="https://assets.codepen.io/162656/george-martsoukos-small-logo.svg" alt="George Martsoukos logo">
+                </a>
+              </footer>
+        </div>
+        <div>
+            <h1 class ="section" >
+                2. Dataset
+            </h1>
+            <br></br>
+            <p style="left: 10%;">
+                <a href="../test_data/1w6y_al/1w6y_al.pdb">1w6y</a> &emsp;
+                <a href="../test_data/1oh0_al/1oh0_al.pdb">1oh0</a> &emsp;
+                <a href="../test_data/1a4h_al/1a4h_al.pdb">1a4h</a> &emsp;
+                <a href="../test_data/1e2k_al/1e2k_al.pdb">1e2k</a> &emsp;
+                <a href="../test_data/1e2l_al/1e2l_al.pdb">1e2l</a> &emsp;
+                <a href="../test_data/1hk1_al/1hk1_al_prot.pdb">1hk1</a> &emsp;
+                <a href="../test_data/1hk2_al/1hk2_al_prot.pdb">1hk2</a> &emsp;
+                <a href="../test_data/1k3l_al/1k3l_al_prot.pdb">1k3l</a> &emsp;
+                <a href="../test_data/1l83_al/1l83_al_prot.pdb">1l83</a> &emsp;
+                <a href="../test_data/1nja_al/1nja_al.pdb">1nja</a> &emsp;
+                <a href="../test_data/1njc_al/1njc_al_align.pdb">1njc</a> &emsp;
+                <a href="../test_data/1nje_al/1nje_al.pdb">1nje</a> &emsp;
+                <a href="../test_data/1ql7_al/1ql7_al_prot.pdb">1ql7</a> &emsp;
+                <a href="../test_data/1syh_al/1syh_al.pdb">1syh</a> &emsp;
+                <a href="../test_data/1syi_al/1syi_al.pdb">1syi</a> &emsp;
+            </p>
+        </div>
+        <div>
+            <h1 class ="section" >
+                3. Result
+            </h1>
+        </div>
+        <div>
+            <h1 class ="section" >
+                3. Reference
+            </h1>
         </div>
     </body>
 </html>
