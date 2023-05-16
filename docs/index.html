@@ -33,7 +33,9 @@
                     of wt protein retrieved from  <a href="https://www.rcsb.org">Protein Data Bank</a></h1>
                 <h1 class="level-1 rectangle">Predict the 3D structure of the proteins by AlphaFold2</h1>
                 <h1 class="level-1 rectangle">Fix protonation state of 3D structures by <a href="http://newbiophysics.cs.vt.edu/H++/hppdetails.php">H++ server</a> </h1>
-                <h1 class="level-1 rectangle">Align the predicted structures with the crystallographic model by Chimera</h1>
+                <h1 class="level-1 rectangle">Align the predicted structures with the crystallographic model by Chimera using 
+                    <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/pythonScript/alignStructure.py">this script</a>
+                </h1>
                 <h1 class="level-1 rectangle">Separate ligand(s) from crystallographic structures and add hydrogens with Obabel then prepare with GAFF2</h1>
                 <h1 class="level-1 rectangle">Convert pdb file of predicted protein structures in isolation to .gro format</h1>
                 <h1 class="level-1 rectangle" style="width:50%">Assemble protein and ligand to form complex</h1>
@@ -62,10 +64,10 @@
             <h1 class ="section" >
                 2. Dataset
             </h1>
-            <h2 style="font-size: 16px; text-align: left; margin-left: 20px; margin-top: 10px;">
+            <h2 style="font-size: 16px; text-align: left; margin-left: 50px; margin-top: 10px;">
                 Alphafold predicted protein structures:
             </h2>
-            <p style="margin-left: 20px; text-align: left; margin-top: 10px;">
+            <p style="margin-left: 50px; text-align: left; margin-top: 10px; margin-right: 50px;">
                 <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1w6y_al/1w6y_al.pdb">1w6y</a> &emsp;
                 <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1oh0_al/1oh0_al.pdb">1oh0</a> &emsp;
                 <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1a4h_al/1a4h_al.pdb">1a4h</a> &emsp;
@@ -131,7 +133,7 @@
             <h1 class ="section" >
                 3. Result
             </h1>
-            <p style="margin-left: 20px; text-align: left; margin-right: 20px;">
+            <p style="margin-left: 50px; text-align: left; margin-right: 50px;">
                 The result of 5 simulations for each protein including crystallographic and Alphafold predicted 
                 structure are reported in <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/docs/result.pdf">this file</a>
             </p>
