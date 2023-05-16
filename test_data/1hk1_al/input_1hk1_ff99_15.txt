@@ -5,7 +5,7 @@ num_chain 			= 1
 # force field family, only support amber at this moment 
 ff 					= amber
 # name of ligand of interest 
-lig 					= TMC
+lig 					= T44
 # name of the force field, choose between: amber03, amber94, amber96, amber99, amber99sb, amber99sb-ildn, ambergs
 ff_name				= amber99
 # name of the water model 
@@ -17,6 +17,6 @@ p_name				= NA
 # Negative charge name
 n_name				= CL
 # number of simulation steps, this determines the time of the simulation time (ns) = sim_step*0.002/1000 
-sim_step				= 50000000
+sim_step				= 7500000
 # data directory
 data_dir 			= /data/genetic_databases/
