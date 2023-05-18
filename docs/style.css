@@ -47,7 +47,7 @@
 
   .introdiv::before {    
         content: "";
-        background-image: url('./introbg.jpg');
+        background-image: url('introbg.jpg');
         background-repeat: no-repeat;
         background-position: center;
         position: absolute;
