@@ -38,6 +38,7 @@
   
   .introdiv {
     margin-bottom: 60px;
+    background-image: url("https://github.com/Unipisa/mpl-affinity-wf/blob/main/docs/introbg.jpg");
   }
   
   .title {
@@ -48,8 +49,8 @@
     text-align: left;
     font-size:24px ;
     margin-top: 20px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
   }
   /* LEVEL-1 STYLES
   –––––––––––––––––––––––––––––––––––––––––––––––––– */
