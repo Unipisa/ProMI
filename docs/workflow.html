@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Workflow</title>
+        <link rel="stylesheet" href="style.css">
+        <!-- <script src="lib/d3.js"></script> -->
+    </head>
+
+    <body>
+        <div id ='introdiv' class ="introdiv" onclick="location.href='index.html'">
+            <h1 class="title" >
+                <br></br>
+                Computational estimation of the impact of mutations on protein-ligand affinity based on Alphafold and MD simulation
+            </h1>
+            <h2 class="subtitle" >
+                University of Pisa
+            </h2>
+        </div>
+        <div id = 'workflowdiv' style="background-color:#ffffff;">
+            <h1 class ="section" style="text-align: center; font-size: 48px;" >
+                Workflow
+            </h1>
+            <div class="container">
+                <h1 class="level-1 rectangle">Generate amino acid sequence of mutation proteins from the FASTA file 
+                    of wt protein retrieved from  <a href="https://www.rcsb.org">Protein Data Bank</a></h1>
+                <h1 class="level-1 rectangle">Predict the 3D structure of the proteins by AlphaFold2</h1>
+                <h1 class="level-1 rectangle">Fix protonation state of 3D structures by <a href="http://newbiophysics.cs.vt.edu/H++/hppdetails.php">H++ server</a> </h1>
+                <h1 class="level-1 rectangle">Align the predicted structures with the crystallographic model by Chimera using 
+                    <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/pythonScript/alignStructure.py">this script</a>
+                </h1>
+                <h1 class="level-1 rectangle">Separate ligand(s) from crystallographic structures and add hydrogens with Obabel then prepare with GAFF2</h1>
+                <h1 class="level-1 rectangle">Convert pdb file of predicted protein structures in isolation to .gro format</h1>
+                <h1 class="level-1 rectangle" style="width:50%">Assemble protein and ligand to form complex</h1>
+                <h1 class="level-1 rectangle" style="width:40%">MDS
+                    <div>
+                        <h2 class="level-2 rectangle">Solvate</h2>
+                        <h2 class="level-2 rectangle">Neutralize by adding Na+ or Cl-</h2>
+                        <h2 class="level-2 rectangle">Minimize energy</h2>
+                        <h2 class="level-2 rectangle">NVT for 1ns</h2>
+                        <h2 class="level-2 rectangle">NPT for 1ns</h2>
+                        <h2 class="level-2-end rectangle">Simulate for 15ns</h2>
+                    </div>
+                </h1>
+                <h1 class="level-1 rectangle" style="width:40%">Compute binding free energy by gmx_MMPBSA</h1>
+                <h1 class="level-1-end rectangle" style="width:40%">Exclude outlier(s) and compute the average</h1>
+            </div>
+              
+              <footer class="page-footer">
+                <span>made by </span>
+                <a href="https://georgemartsoukos.com/" target="_blank">
+                  <img width="24" height="24" src="https://assets.codepen.io/162656/george-martsoukos-small-logo.svg" alt="George Martsoukos logo">
+                </a>
+              </footer>
+        </div>
+    </body>
+</html>

@@ -12,136 +12,64 @@
     <body>
         <!-- <canvas id = "mycanvas" width = "1200" height="900" style="top:30px;left:0px" display="inline">
         </canvas> -->
-        <div id ='introdiv' class ="introdiv" style="background-color:#ffffff; text-align: center;">
-            <h1 class="title">
+        <div id ='introdiv' class ="introdiv" onclick="location.href='index.html'">
+            <h1 class="title" >
+                <br></br>
                 Computational estimation of the impact of mutations on protein-ligand affinity based on Alphafold and MD simulation
             </h1>
-            <h2 style="font-size:18px; text-align: center;">
+            <h2 class="subtitle" >
                 University of Pisa
             </h2>
-            <br></br>
-            <h2 style="font-size:18px; text-align: center;">
-                ***In progress***
-            </h2>
         </div>
-        <div id = 'workflowdiv' style="background-color:#ffffff;">
-            <h1 class ="section" >
-                1. Workflow
+
+        <div id = "bardiv">
+           <div id = "workflow" onclick="location.href='workflow.html'; style.background='lightblue'" 
+            onmouseover="style.background='dodgerblue'" 
+            onmouseout="style.background='lightblue'">
+            <h1>
+                Workflow
             </h1>
-            <div class="container">
-                <h1 class="level-1 rectangle">Generate amino acid sequence of mutation proteins from the FASTA file 
-                    of wt protein retrieved from  <a href="https://www.rcsb.org">Protein Data Bank</a></h1>
-                <h1 class="level-1 rectangle">Predict the 3D structure of the proteins by AlphaFold2</h1>
-                <h1 class="level-1 rectangle">Fix protonation state of 3D structures by <a href="http://newbiophysics.cs.vt.edu/H++/hppdetails.php">H++ server</a> </h1>
-                <h1 class="level-1 rectangle">Align the predicted structures with the crystallographic model by Chimera using 
-                    <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/pythonScript/alignStructure.py">this script</a>
-                </h1>
-                <h1 class="level-1 rectangle">Separate ligand(s) from crystallographic structures and add hydrogens with Obabel then prepare with GAFF2</h1>
-                <h1 class="level-1 rectangle">Convert pdb file of predicted protein structures in isolation to .gro format</h1>
-                <h1 class="level-1 rectangle" style="width:50%">Assemble protein and ligand to form complex</h1>
-                <h1 class="level-1 rectangle" style="width:40%">MDS
-                    <div>
-                        <h2 class="level-2 rectangle">Solvate</h2>
-                        <h2 class="level-2 rectangle">Neutralize by adding Na+ or Cl-</h2>
-                        <h2 class="level-2 rectangle">Minimize energy</h2>
-                        <h2 class="level-2 rectangle">NVT for 1ns</h2>
-                        <h2 class="level-2 rectangle">NPT for 1ns</h2>
-                        <h2 class="level-2-end rectangle">Simulate for 15ns</h2>
-                    </div>
-                </h1>
-                <h1 class="level-1 rectangle" style="width:40%">Compute binding free energy by gmx_MMPBSA</h1>
-                <h1 class="level-1-end rectangle" style="width:40%">Exclude outlier(s) and compute the average</h1>
-            </div>
-              
-              <footer class="page-footer">
-                <span>made by </span>
-                <a href="https://georgemartsoukos.com/" target="_blank">
-                  <img width="24" height="24" src="https://assets.codepen.io/162656/george-martsoukos-small-logo.svg" alt="George Martsoukos logo">
-                </a>
-              </footer>
+           </div>
+           <div id="data" onclick="location.href='data.html'; style.background='lightblue'" 
+           onmouseover="style.background='dodgerblue'" 
+           onmouseout="style.background='lightblue'">
+            <h1>
+                Data
+            </h1>
+           </div>
+           <div id="result" onclick="location.href='result.html'; style.background='lightblue'" 
+           onmouseover="style.background='dodgerblue'" 
+           onmouseout="style.background='lightblue'">
+            <h1>
+                Result
+            </h1>
+           </div>
+           <div id="contact">
+            <h1>
+                Contact
+            </h1>
+           </div>
         </div>
-        <div>
-            <h1 class ="section" >
-                2. Dataset
+        <div id="abstract">
+            <h1 class="section">
+                Abstract
             </h1>
-            <h2 style="font-size: 16px; text-align: left; margin-left: 50px; margin-top: 10px;">
-                Alphafold predicted protein structures:
-            </h2>
-            <p style="margin-left: 50px; text-align: left; margin-top: 10px; margin-right: 50px;">
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1w6y_al/1w6y_al.pdb">1w6y</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1oh0_al/1oh0_al.pdb">1oh0</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1a4h_al/1a4h_al.pdb">1a4h</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1e2k_al/1e2k_al.pdb">1e2k</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1e2l_al/1e2l_al.pdb">1e2l</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1hk1_al/1hk1_al_prot.pdb">1hk1</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1hk2_al/1hk2_al_prot.pdb">1hk2</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1k3l_al/1k3l_al_prot.pdb">1k3l</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1v2k_al/1v2k_al_prot.pdb">1v2k</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1nja_al/1nja_al.pdb">1nja</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1njc_al/1njc_al_align.pdb">1njc</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1nje_al/1nje_al.pdb">1nje</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1ql7_al/1ql7_al_prot.pdb">1ql7</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1syh_al/1syh_al.pdb">1syh</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1syi_al/1syi_al.pdb">1syi</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1ydk_al/1ydk_al_prot.pdb">1ydk</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/2yge_al/2yge_al_align.pdb">2yge</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/2ygf_al/2ygf_al_align.pdb">2ygf</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3ry2_al/3ry2_al.pdb">3ry2</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3rdo_al/3rdo_al.pdb">3rdo</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3neo_al/3neo_al.pdb">3neo</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3nex_al/3nex_al.pdb">3nex</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/2fr3_al/2fr3_al.pdb">2fr3</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/2g78_al/2g78_al.pdb">2g78</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3cwk_al/3cwk_al.pdb">3cwk</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3kgu_al/3kgu_al_prot.pdb">3kgu</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3kgt_al/3kgt_al_prot.pdb">3kgt</a> &emsp;
+            <p style="font-size: 24px; text-align: justify; margin-left: 5%; margin-right: 5%;">
+                Proteins are frequently affected by mutations with consequences on their structure’s stability, 
+                functionality, and binding affinity towards ligands, with important biological effects. 
+                Molecular Dynamics Simulation (MDS) is an effective tool for predicting <i>in silico</i>
+                the binding affinity changes upon aminoacidic mutations. 
+                An essential element for this analysis is the availability of the three-dimensional 
+                structures of the wild-type (wt) and mutated protein isoforms. Until now, crystallographic 
+                structures have been mostly used. Recently, AlphaFold2 allows protein structure predictions 
+                to be made with high model accuracy. In this study, a computational workflow to compute the 
+                difference in the binding free energy between the wt and the mutated protein using AlphaFold2 
+                is proposed. The workflow consists in generating the AlphaFold models for the wt and mutated 
+                proteins, and studying their interaction with ligands using MDS in order to calculate the 
+                difference in binding free energy and infer the mutation effect on binding affinity. 
+                The workflow is validated through results obtained by using crystallographic structures on a 
+                benchmark constistued by 15 mutant proteins.
             </p>
-            <!-- <h2 style="font-size: 16px; text-align: left; margin-left: 10px; margin-top: 10px;">
-                Input files:
-            </h2>
-            <p style="margin-left: 10px; text-align: left; margin-top: 10px;">
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1w6y_al/input_1w6y_ff99_15.txt">1w6y</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1oh0_al/input_1oh0_ff99_15.txt">1oh0</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1a4h_al/input_1a4h_ff99_15.txt">1a4h</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1e2k_al/input_1e2k_ff99_15.txt">1e2k</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1e2l_al/input_1e2l_ff99_15.txt">1e2l</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1hk1_al/input_1hk1_ff99_15.txt">1hk1</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1hk2_al/input_1hk2_ff99_15.txt">1hk2</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1k3l_al/input_1k3l_ff99_15.txt">1k3l</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1v2k_al/input_1v2k_ff99_15.txt">1v2k</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1nja_al/input_1nja_ff99_15.txt">1nja</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1njc_al/input_1a4h_ff99_15.txt">1njc</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1nje_al/input_1a4h_ff99_15.txt">1nje</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1ql7_al/input_1a4h_ff99_15.txt">1ql7</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1syh_al/input_1a4h_ff99_15.txt">1syh</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1syi_al/input_1a4h_ff99_15.txt">1syi</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/1ydk_al/input_1a4h_ff99_15.txt">1ydk</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/2yge_al/input_1a4h_ff99_15.txt">2yge</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/2ygf_al/input_1a4h_ff99_15.txt">2ygf</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3ry2_al/input_1a4h_ff99_15.txt">3ry2</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3rdo_al/input_1a4h_ff99_15.txt">3rdo</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3neo_al/input_1a4h_ff99_15.txt">3neo</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3nex_al/input_1a4h_ff99_15.txt">3nex</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/2fr3_al/input_1a4h_ff99_15.txt">2fr3</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/2g78_al/input_1a4h_ff99_15.txt">2g78</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3cwk_al/input_1a4h_ff99_15.txt">3cwk</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3kgu_al/input_1a4h_ff99_15.txt">3kgu</a> &emsp;
-                <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/test_data/3kgt_al/input_1a4h_ff99_15.txt">3kgt</a> &emsp;
-            </p> -->
-        </div>
-        <div>
-            <h1 class ="section" >
-                3. Result
-            </h1>
-            <p style="margin-left: 50px; text-align: left; margin-right: 50px;">
-                The result of 5 simulations for each protein including crystallographic and Alphafold predicted 
-                structure are reported in <a href="https://github.com/Unipisa/mpl-affinity-wf/blob/main/docs/result.pdf">this file</a>
-            </p>
-        </div>
-        <div>
-            <h1 class ="section" >
-                4. Reference
-            </h1>
         </div>
     </body>
 </html>
