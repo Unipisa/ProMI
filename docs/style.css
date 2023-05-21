@@ -63,6 +63,29 @@
     width: 100%;
     text-decoration: none;
   }  */
+  .allpro{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    /* background-color: #7b9fe0; */
+  }
+  .profamily{
+    display: flex;
+    /* width: 100%; */
+    height: 120px;
+    border: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    vertical-align: middle;
+    align-self: center;
+  }
+  .promember{
+    width: 120px;
+    border-style: groove;
+    height: 120px;
+    align-items: center;
+  }
   #bardiv{
     background-color:lightblue;
     display: flex;
