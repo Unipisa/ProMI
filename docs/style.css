@@ -63,6 +63,27 @@
     width: 100%;
     text-decoration: none;
   }  */
+  .contactbox{
+    display: flex;
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 100%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+  .contactpic{
+    display: flex;
+    justify-content: center;
+    height: 200px;
+    width: 200px;
+    background-image: url("blankava.jpg");
+  }
+  .contactinfo{
+    /* display: flex; */
+    text-align: justify;
+    margin-left: 20px;
+    margin-top: 20px;
+  }
   .allpro{
     display: flex;
     justify-content: center;
@@ -96,26 +117,37 @@
     vertical-align: middle;
   }
   #workflow{
-    width: 25%;
+    width: 20%;
     height: 50px;
+    vertical-align: middle;
     border-color: rgba(0, 0, 0, 0.5);
     border-style: groove;
   }
   #data{
-    width: 25%;
+    width: 20%;
     height: 50px;
+    vertical-align: middle;
+    border-color: rgba(0, 0, 0, 0.5);
+    border-style: groove;
+  }
+  #code{
+    width: 20%;
+    height: 50px;
+    vertical-align: middle;
     border-color: rgba(0, 0, 0, 0.5);
     border-style: groove;
   }
   #result{
-    width: 25%;
+    width: 20%;
     height: 50px;
+    vertical-align: middle;
     border-color: rgba(0, 0, 0, 0.5);
     border-style: groove;
   }
   #contact{
-    width: 25%;
+    width: 20%;
     height: 50px;
+    vertical-align: middle;
     border-color: rgba(0, 0, 0, 0.5);
     border-style: groove;
   }

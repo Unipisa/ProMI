@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Code</title>
+        <link rel="stylesheet" href="style.css">
+        <!-- <script src="lib/d3.js"></script> -->
+    </head>
+
+    <body>
+        <div id ='introdiv' class ="introdiv" onclick="location.href='index.html'">
+            <h1 class="title" >
+                <br></br>
+                Computational estimation of the impact of mutations on protein-ligand affinity based on Alphafold and MD simulation
+            </h1>
+            <h2 class="subtitle" >
+                University of Pisa
+            </h2>
+        </div>
+        <div>
+            <h1 class ="section" >
+                Code
+            </h1>    
+        </div>
+        <div>
+            <h2 style="margin-left: 5%; margin-right: 5%; text-align: center;">
+                To align structure predicted by Alphafold with the crystallographic structure from Protein Data Bank
+            </h2>
+            <p style="margin-left: 5%; margin-right: 5%; text-align: center; margin-top: 20px;">
+                Install chimera and run <a href="alignStructure.py" download>this script</a> with the command: 
+                <br></br>
+                python3 alignStructure.py -f [input folder] -o [output folder] -c [path to chimera run file] -p + [path to the crystallographic structure]
+                <br></br>
+                The input folder is a folder contains subfolder, each subfolder is a result folder from AlphaFold. Inside each subfolder there should be a file name ranked_0.pdb
+                <br></br>
+                Path to chimera run file often ends with "bin/chimera" 
+            </p>
+        </div>
+    </body>
+</html>
+        
