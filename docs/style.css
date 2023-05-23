@@ -72,7 +72,7 @@
     margin-bottom: 50px;
   }
   .contactpic{
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     height: 200px;
     width: 200px;
