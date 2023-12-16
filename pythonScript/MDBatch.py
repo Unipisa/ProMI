@@ -3,6 +3,7 @@ from logging import exception
 import sys
 import os
 import fileinput
+import shutil
 
 
 def parseAgruments():
@@ -22,9 +23,13 @@ def parseAgruments():
         help='Mode: 1 - compute MD simulation only, \
             2 - compute MMPBSA only, \
             3 - compute both MD and MMPBSA')
+    parser.add_argument('-n', '--number', type=int, nargs='?', default=1, \
+        help='Number of simulations')
+    
     parser.add_argument('-d', '--debug', help="Print log to debug or not", action='store_true')
     
     return parser
+
 
 def readLigandFile(path, debug=False):
     lfile = open(path, 'r')
@@ -106,6 +111,7 @@ def readConfigFile(path, debug=False):
         print(conf)
     return conf
 
+# path: path to topol.top file 
 def modifyTopol(path, list_species, debug=False):
     for line in fileinput.input(path,inplace=1):
         if 'forcefield.itp' in line:
@@ -198,6 +204,10 @@ def parseLine(line, debug=False):
         'line': line}
     return linedict
 
+# rootpath: path to folder "md" with subfolders "Share", and each subfolder for each mutant protein
+# gmx:
+# pdb file: 
+# config: 
 def runPdb2gmx(rootpath, gmx, pdbfile, config, debug=False):
     # add ions here if needed 
     if os.path.isfile(os.path.join(rootpath, "Share", 'ions.txt')):
@@ -411,8 +421,10 @@ def runFit(gmx, input, debug=False):
         fit.extend(['<', input])    
     os.system(' '.join(fit))
 
-def processMD(rootpath, gmx, list_species, conf, debug=False):
+def processMD(rootpath, gmx, list_species, conf, time = 1, debug=False):
     # Reading config files 
+    if debug:
+        print("Run processMD")
     ionmdp = os.path.join(rootpath, 'Share', 'ions.mdp')
     emmdp = os.path.join(rootpath, "Share", "em.mdp")
     nvtmdp = os.path.join(rootpath, "Share", "nvt.mdp")
@@ -427,27 +439,51 @@ def processMD(rootpath, gmx, list_species, conf, debug=False):
 
     subfolders = os.scandir(rootpath)
     
+    # iterate over all subfolders inside "md" folder 
+    # each subfolder is for a mutant protein 
     for subfolder in subfolders:
         if subfolder.name[0] != '.' and subfolder.name != 'Share' and os.path.isdir(subfolder):
             if debug:
                 print("Run MD in folder {}".format(subfolder.name))
             files = os.scandir(subfolder)
             for file in files:
-                if '.pdb' in file.name:
+                # check "prot" because we work with the protonated file 2
+                if os.path.isfile(file) and '.pdb' in file.name and 'prot_' in file.name:
                     if debug:
-                        print('Working with file {}'.format(file.name))
+                        print('Working with .pdb file {}'.format(file.name))
+                    
                     # change to current directory
                     os.chdir(subfolder)
+
+                    # create a subfolder for the (time)-th simulation
+                    try:
+                        os.mkdir(str(time) + '_th')
+                    except:
+                        print("Folder {} already exists".format(str(time) + '_th'))
+
+                    curdir = os.path.abspath(os.path.join(subfolder, str(time) + '_th'))
+                    os.chdir(curdir)
+                    
                     if debug:
-                        print("Current directory is: {}".format(os.getcwd()))
+                        print("Create a new directory for the {}-th \
+                          simulation and make it current directory".format(curdir))
+                    
+                    # now copy the .pdb file of protein outside into this subfolder 
+                    shutil.copy(file, curdir)
+
+                    curpdbname = os.path.join(curdir, file.name)
+
+                    if debug:
+                        print("Working with file {}".format(curpdbname))
 
                     # Run pdb2gmx
-                    runPdb2gmx(rootpath, gmx, file.name, conf, debug)
+                    runPdb2gmx(rootpath, gmx, curpdbname, conf, debug)
                     
                     # add ligand into the com.gro files 
                     modifyTopol('topol.top', list_species, debug) # command this for test 
                     modifyGro('protein.gro', list_species, debug)
                     # Solvate the system 
+
                     runSolvation(gmx, conf, debug)
                     runNeutralize(gmx, ionmdp, conf, genioninput, debug)
                     runEM(gmx,emmdp, conf, debug)
@@ -464,17 +500,29 @@ def processMMPBSA(rootpath, mmpbsa, debug=False):
         exit()
 
     subfolders = os.scandir(rootpath)
-    
+    # iterate over all subfolders inside "md" folder 
+    # each subfolder is for a mutant protein 
     for subfolder in subfolders:
         if subfolder.name[0] != '.' and subfolder.name != 'Share' and os.path.isdir(subfolder):
             os.chdir(subfolder)
             if debug:
-                print("Run MMPBSA in folder {}".format(subfolder.name))
+                print("Now we are in {}".format(subfolder.name))
                 os.system('pwd')
             
-            mm = [mmpbsa, 'MPI', '-O', '-i', input, '-cs', 'md.tpr', '-ci', 'index.ndx', \
-                '-cg', '1', '13', '-ct', 'md_fit.xtc', '-cp', 'topol.top', '-nogui']
-            os.system(" ".join(mm))
+            # here need to loop all over "x_th" subfolders inside this folder
+            #  to process for each simulation
+            subsubfolders = os.scandir(subfolder)
+            for subsubfolder in subsubfolders:
+                if os.path.isdir(subsubfolder) and "_th" in subsubfolder.name:
+                    if debug:
+                        print("Working with folder {}".format(subsubfolder.name))
+                        os.system('pwd')
+
+                    os.chdir(subsubfolder.name)
+                    mm = [mmpbsa, 'MPI', '-O', '-i', input, '-cs', 'md.tpr', '-ci', 'index.ndx', \
+                        '-cg', '1', '13', '-ct', 'md_fit.xtc', '-cp', 'topol.top', '-nogui']
+                    os.system(" ".join(mm))
+                    os.chdir("../")
 
 def main():
     parser = parseAgruments()
@@ -533,10 +581,10 @@ def main():
 
     if args['mode'] == 1 or args['mode'] == 3:
         # print("Run MD")
-        processMD(absin, args['gmx'], list_species, conf, debug)
+        processMD(absin, args['gmx'], list_species, conf, args['number'], debug)
     if args['mode'] == 2 or args['mode'] == 3:
         processMMPBSA(absin, args['mmpbsa'], debug)
-        # print("Run MMPBA")
+        # print("Run MMPBSA")
 
                 
 if __name__ == "__main__":

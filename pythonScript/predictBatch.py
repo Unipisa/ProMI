@@ -22,7 +22,7 @@ def parseAgruments():
 
     parser.add_argument('-t', '--templatedate', type=str, nargs='?', \
         help='Max template date for predicting protein structure, \
-            default = ' + todaystr, default='2003-05-20')
+            default = ' + todaystr, default=todaystr)
 
     
     # parser.add_argument('-t', '--templatedate', type=str, nargs='?', \
@@ -33,7 +33,7 @@ def parseAgruments():
     parser.add_argument('-m', '--modelpreset', type=str, nargs='?', \
         help="Model preset for alphafold, default = monomer", default='monomer')
     parser.add_argument('-r', '--relax', type=str, nargs = '?', \
-        help='Run relaxation or not, default is true', default='true')
+        help='Run relaxation for <all|best|none>', default='best')
     parser.add_argument('-d', '--debug', help="Print log to debug or not", action='store_true')
     return parser
             
@@ -90,7 +90,7 @@ def main():
                 print("======================Predicting file {}======================".format(os.path.join(absin, file)))
                 command = ['python3', 'docker/run_docker.py', ' --output_dir=' + absout, 
                     '--max_template_date=' + args['templatedate'], 
-                    '--data_dir=' + args['datadir'], '--run_relax=' + args['relax'],
+                    '--data_dir=' + args['datadir'], '--models_to_relax=' + args['relax'],
                     '--model_preset=' + args['modelpreset'],
                     '--fasta_paths=' + os.path.join(absin, file)]
                 if debug:

@@ -71,17 +71,32 @@ def parseMetaFile(metapath, outpath, debug=False):
 
 def parseLine(line, debug=False):
     key = str(line[0:6]).strip()
-    id = int(''.join(line[6:11]))
+    try:
+        id = int(''.join(line[6:11]))
+    except:
+        print("No integer found in {}".format(''.join(line[6:11])))
+        id = -1
     atom = str(line[11:17]).strip()
     name = str(line[17:21]).strip()
     chain = str(line[21:22]).strip()
-    resid = int(line[22:26])
+
+    try:
+        resid = int(line[22:26])
+    except:
+        print("No integer found in {}".format(''.join(line[22:26])))
+        resid = -1
+
+    # resid = int(line[22:26])
     if key != 'TER':
-        x = float(line[26:38])
+        x = float(line[30:38])
         y = float(line[38:46])
         z = float(line[46:54])
-        a = float(line[54:60])
-        b = float(line[60:66])
+        try:
+            a = float(line[54:60])
+            b = float(line[60:66])
+        except ValueError:
+            a = 0
+            b = 0
         kind = str(line[66:len(line)])
     else:
         x, y, z, a, b = 0, 0, 0, 0, 0
@@ -115,7 +130,7 @@ def getLigands(pdbpath, debug=False):
     for line in lines:
         if line[0:4] == 'ATOM' or line[0:3] == 'TER':
             # parse ATOM line
-            linedict = parseLine(line)
+            linedict = parseLine(line, debug=False)
             chain = linedict['chain']
             if chain not in prochains:
                 if debug:
@@ -268,13 +283,13 @@ def separateLigands(prodict, ligdict, metadict, ionsdict, outpath, datapath, deb
     ligfilelines.append(str(liginfor['ligands'][consider])+ '\n') # number of ligand belongs to species declared above 
     for i in range (liginfor['ligands'][consider]):
         if i == 0:
-            line = '../Share/' + consider + '.acpype/' + consider + '_fix.gro\n'
+            line = '../../Share/' + consider + '.acpype/' + consider + '_fix.gro\n'
         else:
-            line = '../Share/' + consider + '_' + str(i) + '.acpype/' + consider + '_' + str(i) + '_fix.gro\n'
+            line = '../../Share/' + consider + '_' + str(i) + '.acpype/' + consider + '_' + str(i) + '_fix.gro\n'
         ligfilelines.append(line)
-    ligfilelines.append('../Share/' + consider + '.acpype/' + consider + '_fix.itp\n')
-    ligfilelines.append('../Share/' + consider + '.acpype/' + consider + '_fix.prm\n')
-    ligfilelines.append('../Share/' + consider + '.acpype/' + 'posre_' + consider + '.itp\n')
+    ligfilelines.append('../../Share/' + consider + '.acpype/' + consider + '_fix.itp\n')
+    ligfilelines.append('../../Share/' + consider + '.acpype/' + consider + '_fix.prm\n')
+    ligfilelines.append('../../Share/' + consider + '.acpype/' + 'posre_' + consider + '.itp\n')
 
     # add other ligand 
     for lig in liginfor['ligands'].keys():
@@ -284,13 +299,13 @@ def separateLigands(prodict, ligdict, metadict, ionsdict, outpath, datapath, deb
             ligfilelines.append(str(liginfor['ligands'][lig])+ '\n')
             for i in range (liginfor['ligands'][lig]):
                 if i == 0:
-                    line = '../Share/' + lig + '.acpype/' + lig + '_fix.gro\n'
+                    line = '../../Share/' + lig + '.acpype/' + lig + '_fix.gro\n'
                 else:
-                    line = '../Share/' + lig + '_' + str(i) + '.acpype/' + lig + '_' + str(i) + '_fix.gro\n'
+                    line = '../../Share/' + lig + '_' + str(i) + '.acpype/' + lig + '_' + str(i) + '_fix.gro\n'
                 ligfilelines.append(line)
-            ligfilelines.append('../Share/' + lig + '.acpype/' + lig + '_fix.itp\n')
-            ligfilelines.append('../Share/' + lig + '.acpype/' + lig + '_fix.prm\n')
-            ligfilelines.append('../Share/' + lig + '.acpype/' + 'posre_' + lig + '.itp\n')
+            ligfilelines.append('../../Share/' + lig + '.acpype/' + lig + '_fix.itp\n')
+            ligfilelines.append('../../Share/' + lig + '.acpype/' + lig + '_fix.prm\n')
+            ligfilelines.append('../../Share/' + lig + '.acpype/' + 'posre_' + lig + '.itp\n')
     ligfile = open(os.path.join(outpath, 'Share', 'ligands.txt'), 'w')
     ligfile.write(''.join(ligfilelines))
     ligfile.close()
@@ -360,7 +375,7 @@ def separateLigands(prodict, ligdict, metadict, ionsdict, outpath, datapath, deb
         fnvt.write(''.join(nvtlines))
         fnvt.close()
     else:
-        print("Cannot file nvt.mdp file in the data folder")
+        print("Cannot find nvt.mdp file in the data folder")
 
     # file npt.mdp 
     if os.path.isfile(os.path.join(datapath, 'npt.mdp')):
@@ -375,7 +390,7 @@ def separateLigands(prodict, ligdict, metadict, ionsdict, outpath, datapath, deb
         fnpt.write(''.join(nptlines))
         fnpt.close()
     else:
-        print("Cannot file nvt.mdp file in the data folder")
+        print("Cannot find nvt.mdp file in the data folder")
 
     # file md.mdp 
     if os.path.isfile(os.path.join(datapath, 'md.mdp')):
@@ -423,7 +438,6 @@ def separateLigands(prodict, ligdict, metadict, ionsdict, outpath, datapath, deb
 
 def addHydrogen(savedlig, outpath, debug=False):
     print("=========ADD HYDROGEN===========")
-    curdir = os.getcwd()
     # Get absolute path of "Share" folder 
     shareabs = os.path.abspath (os.path.join(outpath, "Share"))
 
@@ -435,7 +449,7 @@ def addHydrogen(savedlig, outpath, debug=False):
         if debug:
             print("Adding hydrogen to the ligand {}".format(lig))
         ligpath = shareabs + '/' + lig
-        comrun = ['/tmp/miniconda3/bin/obabel', ligpath, '-O', ligpath, '-h'] 
+        comrun = ['/tmp/miniconda3/bin/obabel', ligpath, '-O', ligpath, '-h', '-p', '-7.4'] 
         if debug:
             print(' '.join(comrun))
 
@@ -448,10 +462,7 @@ def addHydrogen(savedlig, outpath, debug=False):
     fac = open(facname, 'w')
     fac.write(acpypefile)
     fac.close()
-    
-    os.chdir(curdir)
-    if debug:
-        print("The current directory is {}".format(curdir))
+
     print("=========DONE ADD HYDROGEN===========")
 
 

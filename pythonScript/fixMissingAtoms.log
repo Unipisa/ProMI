@@ -1,0 +1,201 @@
+
+                         MODELLER 10.2, 2021/11/15, r12267
+
+     PROTEIN STRUCTURE MODELLING BY SATISFACTION OF SPATIAL RESTRAINTS
+
+
+                     Copyright(c) 1989-2021 Andrej Sali
+                            All Rights Reserved
+
+                             Written by A. Sali
+                               with help from
+              B. Webb, M.S. Madhusudhan, M-Y. Shen, G.Q. Dong,
+          M.A. Marti-Renom, N. Eswar, F. Alber, M. Topf, B. Oliva,
+             A. Fiser, R. Sanchez, B. Yerkovich, A. Badretdinov,
+                     F. Melo, J.P. Overington, E. Feyfant
+                 University of California, San Francisco, USA
+                    Rockefeller University, New York, USA
+                      Harvard University, Cambridge, USA
+                   Imperial Cancer Research Fund, London, UK
+              Birkbeck College, University of London, London, UK
+
+
+Kind, OS, HostName, Kernel, Processor: 4, Darwin Phams-MacBook-Air.local 21.3.0 x86_64
+Date and time of compilation         : 2021/11/15 11:17:56
+MODELLER executable type             : mac10v4-intel64
+Job starting time (YY/MM/DD HH:MM:SS): 2022/11/10 15:11:02
+
+openf___224_> Open           $(LIB)/top_heav.lib
+read_to_681_> topology.submodel read from topology file:        3
+openf___224_> Open           $(LIB)/par.lib
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:       393438     384.217     0.375
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:       395038     385.779     0.377
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:       399018     389.666     0.381
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:       401018     391.619     0.382
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:       404018     394.549     0.385
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:       408518     398.943     0.390
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:       414090     404.385     0.395
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:       416890     407.119     0.398
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:       421090     411.221     0.402
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:       427390     417.373     0.408
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:       430162     420.080     0.410
+
+Dynamically allocated memory at  amaxparameters [B,KiB,MiB]:       431562     421.447     0.412
+read_pa_232_> parameters    BONDS   ANGLS  DIHEDS IMPROPS    MODE
+                              227     561     661     112       0
+openf___224_> Open           /Users/phamgiang/Documents/Study/Master.nosync/Thesis/Workspace.nosync/scripts/exp_data/nofix2/3um8.pdb
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       442599     432.226     0.422
+
+Dynamically allocated memory at    amaxsequence [B,KiB,MiB]:       442675     432.300     0.422
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       442846     432.467     0.422
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       443696     433.297     0.423
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       444954     434.525     0.424
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       446858     436.385     0.426
+
+Dynamically allocated memory at    amaxsequence [B,KiB,MiB]:       446898     436.424     0.426
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       446988     436.512     0.426
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       449844     439.301     0.429
+
+Dynamically allocated memory at    amaxsequence [B,KiB,MiB]:       449904     439.359     0.429
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       450039     439.491     0.429
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       454323     443.675     0.433
+
+Dynamically allocated memory at    amaxsequence [B,KiB,MiB]:       454411     443.761     0.433
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       454609     443.954     0.434
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       461035     450.229     0.440
+
+Dynamically allocated memory at    amaxsequence [B,KiB,MiB]:       461167     450.358     0.440
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       461464     450.648     0.440
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       471086     460.045     0.449
+
+Dynamically allocated memory at    amaxsequence [B,KiB,MiB]:       471286     460.240     0.449
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       471736     460.680     0.450
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       486186     474.791     0.464
+
+Dynamically allocated memory at    amaxsequence [B,KiB,MiB]:       486486     475.084     0.464
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       487161     475.743     0.465
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       508819     496.894     0.485
+
+Dynamically allocated memory at    amaxsequence [B,KiB,MiB]:       509267     497.331     0.486
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       510275     498.315     0.487
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       542779     530.058     0.518
+
+Dynamically allocated memory at    amaxsequence [B,KiB,MiB]:       543451     530.714     0.518
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       544963     532.190     0.520
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       593719     579.804     0.566
+
+Dynamically allocated memory at    amaxsequence [B,KiB,MiB]:       594727     580.788     0.567
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       596995     583.003     0.569
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       670129     654.423     0.639
+
+Dynamically allocated memory at    amaxsequence [B,KiB,MiB]:       670213     654.505     0.639
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       670213     654.505     0.639
+
+Dynamically allocated memory at    amaxsequence [B,KiB,MiB]:       671725     655.981     0.641
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       675127     659.304     0.644
+
+Dynamically allocated memory at amaxcoordinates [B,KiB,MiB]:       784811     766.417     0.748
+
+Dynamically allocated memory at       amaxmodel [B,KiB,MiB]:      1567499    1530.761     1.495
+read_mo_297_> Segments, residues, atoms:        2     1089     9044
+read_mo_298_> Segment:        1  1:A  608:A     4543
+read_mo_298_> Segment:        2  1:B  608:B     4501
+
+Dynamically allocated memory at   amaxalignment [B,KiB,MiB]:      1600032    1562.531     1.526
+
+Dynamically allocated memory at   amaxstructure [B,KiB,MiB]:      2248425    2195.728     2.144
+
+Dynamically allocated memory at   amaxalignment [B,KiB,MiB]:      2258794    2205.854     2.154
+
+Dynamically allocated memory at   amaxstructure [B,KiB,MiB]:      2907187    2839.050     2.773
+
+Dynamically allocated memory at       amaxmodel [B,KiB,MiB]:      2977115    2907.339     2.839
+
+mkilst______> segment topology constructed from sequence and RTF:
+              segments residues  atoms  bonds angles dihedrals impropers:
+                     1      547   4542   4649      0         0      2046
+
+Dynamically allocated memory at       amaxmodel [B,KiB,MiB]:      3171175    3096.851     3.024
+
+patch_______> segment topology patched using RTF:  1 ;  MET  ;  NTER
+              segments residues  atoms  bonds angles dihedrals impropers:
+                     1      547   4542   4649   6278      7422      2046
+
+
+Dynamically allocated memory at       amaxmodel [B,KiB,MiB]:      3362031    3283.233     3.206
+patch_______> segment topology patched using RTF:  547 ;  ALA  ;  CTER
+              segments residues  atoms  bonds angles dihedrals impropers:
+                     1      547   4543   4650   6280      7424      2047
+
+genseg______> segment topology constructed from sequence and RTF:
+              segments residues  atoms  bonds angles dihedrals impropers:
+                     1      547   4543   4650   6280      7424      2047
+
+Dynamically allocated memory at       amaxmodel [B,KiB,MiB]:      3431423    3350.999     3.272
+
+mkilst______> segment topology constructed from sequence and RTF:
+              segments residues  atoms  bonds angles dihedrals impropers:
+                     2     1089   9043   9257   6280      7424      4079
+
+Dynamically allocated memory at       amaxmodel [B,KiB,MiB]:      3623843    3538.909     3.456
+
+patch_______> segment topology patched using RTF:  548 ;  MET  ;  NTER
+              segments residues  atoms  bonds angles dihedrals impropers:
+                     2     1089   9043   9257  12503     14783      4079
+
+
+Dynamically allocated memory at       amaxmodel [B,KiB,MiB]:      3828659    3738.925     3.651
+patch_______> segment topology patched using RTF:  1089 ;  ALA  ;  CTER
+              segments residues  atoms  bonds angles dihedrals impropers:
+                     2     1089   9044   9258  12505     14785      4080
+
+genseg______> segment topology constructed from sequence and RTF:
+              segments residues  atoms  bonds angles dihedrals impropers:
+                     2     1089   9044   9258  12505     14785      4080
+transfe_506_> MODEL is an average of all templates.
+transfe_511_> Number of templates for coordinate transfer:        1
+              After transferring coordinates of the equivalent template atoms,
+              there are defined, undefined atoms in MODEL:     9044        0
+openf___224_> Open           /Users/phamgiang/Documents/Study/Master.nosync/Thesis/Workspace.nosync/scripts/exp_data/fix/fix_3um8.pdb
+wrpdb___568_> Residues, atoms, selected atoms:     1089     9044     9044
+
+Dynamically allocated memory at          finish [B,KiB,MiB]:      2488971    2430.636     2.374
+Starting time                                            : 2022/11/10 15:11:02
+Closing time                                             : 2022/11/10 15:11:03
+Total CPU time [seconds]                                 :       0.93

@@ -1,10 +1,9 @@
 import argparse as ap
-from ast import parse
-from datetime import date
-from logging import exception
 import os
-from datetime import date
-import subprocess as sp 
+import calRMSD 
+from genShareFolder import parseLine 
+
+
 
 
 def parseAgruments():
@@ -21,9 +20,51 @@ def parseAgruments():
          help='Path of Chimera running file', required=True) 
     parser.add_argument('-p', '--model', type=str, nargs='?', \
          help='Path of the model pdb file to align', required=True) 
+    parser.add_argument('-l', '--ligand', type=str, nargs='?', \
+                        help='Name of ligand of interest', default=None)
     parser.add_argument('-d', '--debug', help="Print log to debug or not", action='store_true')
+    
     return parser
             
+
+def takeOneChain(inpdb, outpdb, debug=False):
+    file = open(inpdb, 'r')
+    lines = file.readlines() 
+    prochains = {} 
+    for line in lines:
+        if line[0:4] == 'ATOM' or line[0:3] == 'TER' or line[0:6] == "HETATM":
+            # parse ATOM line
+            linedict = parseLine(line, debug=False)
+            chain = linedict['chain']
+            if chain not in prochains:
+                if debug:
+                    print("New protein chain: {}".format(chain))
+                prochains[chain] = [linedict['line']]
+            else:
+                # if debug:
+                #     print("Append line to old chain {}".format(chain))
+                prochains[chain].append(linedict['line'])
+    
+    # print(list(prochains.keys())) 
+    keylist = list(prochains.keys())
+    if len(keylist) >= 1:
+        if debug:
+            print("Work with only monomer, take only one chain {}".format(keylist[0]))
+        
+        newfile = open(outpdb,'w')
+        newfile.write(''.join(prochains[keylist[0]]))
+        newfile.close() 
+    else: 
+        print("Empt keylist: ")
+        print(keylist)
+
+        # for chainline in prochains[keylist[0]]:
+        #     # print(chainline['line'])
+        #     # print(chainline) 
+        #     newfile.writeline
+
+        
+
 
 def main():
     parser = parseAgruments()
@@ -60,6 +101,14 @@ def main():
             if debug:
                 print("The Chimera file is at {}".format(abschi))
 
+        pdbnameonly = abspdb.split('/')[-1]
+        mononame = 'mono_' + pdbnameonly 
+        absmononame = abspdb.replace(pdbnameonly, mononame)
+        if debug:
+            print("Monomer file is saved at {}".format(absmononame))
+        takeOneChain(abspdb, absmononame)
+        
+
         # this block is for run chimera from my macbook
         # os.chdir('/') # go to root directory of the machine
         # if debug:
@@ -80,7 +129,7 @@ def main():
                 rank0 = os.path.join(absin, content, 'ranked_0.pdb')
                 if os.path.isfile(rank0):
                     if debug:   
-                        print('Align the file {} with the file {}'.format(rank0, abspdb))
+                        print('Align the file {} with the file {}'.format(rank0, absmononame))
                     # write command line .cxc file for ChimeraX
                     # store in the subfolder of the mutated structure
                     if not os.path.isdir(os.path.join(str(absout), str(content.name))):
@@ -119,10 +168,10 @@ def main():
                     # calling Chimera to align file with the pdb model.
                     # command = ['.' + abschi, '--nogui', '--silent' ,abspdb, str(rank0), filename]
 
-                    command = [abschi, '--nogui', '--silent' ,abspdb, str(rank0), filename]
+                    command = [abschi, '--nogui', '--silent' ,absmononame, str(rank0), filename]
 
                     # commandX = ['.' + abschi, '--nogui', '--silent' ,abspdb, str(rank0), filenameX]
-                    commandX = [abschi, '--nogui', '--silent' ,abspdb, str(rank0), filenameX]
+                    commandX = [abschi, '--nogui', '--silent' ,absmononame, str(rank0), filenameX]
 
                     if 'chimerax' in str(abschi).lower():
                         if debug:
@@ -134,7 +183,21 @@ def main():
                             print(' '.join(command))
                             print(filecontent)
                         os.system(' '.join(command))
-                
+                    
+
+                    # calculate confidence measurement from here 
+                    # between experimental structure (abspdb) 
+                    # and aligned alphafold structure (str(content.name) + '_aligned.pdb\n')
+                    if args['ligand'] != None:
+                        print("Calculate RMSD considering the ligand of interest {}".format(args['ligand']))
+                        calRMSD.apply(absmononame, \
+                            str(absout) + '/' + str(content.name)+ '/' + str(content.name) + '_aligned.pdb', \
+                            str(absout) + '/' + str(content.name)+ '/' + (str(content.name)) + '_confedence.txt', args['ligand'])
+                    
+                    if debug:
+                        print("Done processing, delete {}".format(absmononame))
+                    
+
 if __name__ == "__main__":
     main()
     

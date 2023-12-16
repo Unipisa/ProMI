@@ -129,14 +129,14 @@ def parseMutationFile(path, fastas, outpath, debug=False):
             genPointMutation(fastas, outpath, line, debug)
     return muts 
 
-def writeNewFile(fastas, fullname, debug=False):
-    outfile = open(fullname, 'w')
-    for fasta in fastas:
-        outfile.write(fasta['description']) 
-        outfile.write('\n')
-        outfile.write(fasta['sequence'])
-        outfile.write('\n')
-    outfile.close()
+# def writeNewFile(fastas, fullname, debug=False):
+#     outfile = open(fullname, 'w')
+#     for fasta in fastas:
+#         outfile.write(fasta['description']) 
+#         outfile.write('\n')
+#         outfile.write(fasta['sequence'])
+#         outfile.write('\n')
+#     outfile.close()
 
 def genRangeMutations(fastas, muts, outpath, debug=False): # start counts from 1
     for mut in muts:
