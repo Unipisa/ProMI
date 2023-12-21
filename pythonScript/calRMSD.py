@@ -137,7 +137,10 @@ def apply(path_exp, path_align, path_out, ligname, dist = 5, debug=True):
 
 
     atom_pr_align = pr_align.df['ATOM']
+
     atom_pr_ex = pr_exp.df['ATOM']
+    # some time the res_id start with 0, it causes problem, delete this one
+    atom_pr_ex = atom_pr_ex.drop(atom_pr_ex[atom_pr_ex['residue_number'] == 0].index)
 
     al_seq = getseq(atom_pr_align)
     ex_seq = getseq(atom_pr_ex)
