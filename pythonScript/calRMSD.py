@@ -85,24 +85,40 @@ def getseq(atomdf, debug=False):
     # print(seen)
     return seq
 
+def eliminateH(df):
+    print("Eliminate Hydrogen atom")
+    #le righe di temp contengono true solo se l'atomo è un idrogeno
+    temp = ~df['atom_name'].str.startswith("H")
+    ris = df.loc[temp]
+    return ris.reset_index(drop=True)
             
 def apply(path_exp, path_align, path_out, ligname, dist = 5, debug=True):
     if debug:
         print("Load file {}".format(path_align))
     pr_align = PandasPdb().read_pdb(path_align)
 
-    # al_seq = ''.join(pr_align.amino3to1()['residue_name'].tolist())
 
     if debug:
         print("Load file {}".format(path_exp))
     pr_exp = PandasPdb().read_pdb(path_exp)
 
+    atom_pr_align = pr_align.df['ATOM']
+    atom_pr_ex = pr_exp.df['ATOM']
+
+    # some time the res_id start with 0, it causes problem, delete this one
+    atom_pr_ex = atom_pr_ex.drop(atom_pr_ex[atom_pr_ex['residue_number'] == 0].index)
+
+    # now eliminate Hydrogen atoms 
+    atom_pr_align = eliminateH(atom_pr_align)
+    atom_pr_ex = eliminateH(atom_pr_ex)
+
 
     # get all kind of ligands 
     ligands = pr_exp.df['HETATM']
+    # print(ligand)
 
-    # get ligand of interest
-    ligand = ligands[ligands['residue_name'] == ligname]
+    # throw water molecules away
+    ligand = ligands[ligands['residue_name'] != 'HOH']
     # print(ligand)
 
     # list of residue id of alphafold structure near the ligand 
@@ -111,7 +127,7 @@ def apply(path_exp, path_align, path_out, ligname, dist = 5, debug=True):
     # list of residue id of experimental structure near the ligand 
     ex_resids = []
 
-    print(ligand.index)
+    # print("LIGAND INDEX",ligand.index)
     for lidx in ligand.index:
         # get atoms within radius = dist from ligand of experimental structure 
         l = ligands.iloc[lidx] 
@@ -120,11 +136,19 @@ def apply(path_exp, path_align, path_out, ligname, dist = 5, debug=True):
 
         al_dist = pr_align.distance(xyz = l_coor, records=('ATOM'))
         lig_atom_within = pr_align.df['ATOM'][al_dist < dist]
-        al_resids += lig_atom_within['residue_number'].drop_duplicates().tolist()
+        # now eliminate Hydrogen atoms 
+        lig_atom_within = eliminateH(lig_atom_within)
 
+
+        # lig_atom_within = lig_atom_within[lig_atom_within['atom_name'] != 'H']
+
+        al_resids += lig_atom_within['residue_number'].drop_duplicates().tolist()
 
         ex_dist = pr_exp.distance(xyz = l_coor, records=('ATOM'))
         ex_atom_within = pr_exp.df['ATOM'][ex_dist < dist]
+        # now eliminate Hydrogen atoms 
+        ex_atom_within = eliminateH(ex_atom_within)
+
         ex_resids += ex_atom_within['residue_number'].drop_duplicates().tolist()
     
     # list of residue id of atoms within the radius
@@ -136,22 +160,20 @@ def apply(path_exp, path_align, path_out, ligname, dist = 5, debug=True):
     print(ex_resids)
 
 
-    atom_pr_align = pr_align.df['ATOM']
+    # also drop Hydrogen atoms 
 
-    atom_pr_ex = pr_exp.df['ATOM']
-    # some time the res_id start with 0, it causes problem, delete this one
-    atom_pr_ex = atom_pr_ex.drop(atom_pr_ex[atom_pr_ex['residue_number'] == 0].index)
 
     al_seq = getseq(atom_pr_align)
     ex_seq = getseq(atom_pr_ex)
 
-    print(al_seq)
-    print(ex_seq)
+    # print(al_seq)
+    # print(ex_seq)
 
     pairs1, pairs2 = smithwaterman(al_seq, ex_seq)
     
-    print(pairs1)
-    print(pairs2)
+    # if debug:
+    #     print(pairs1)
+    #     print(pairs2)
     
     matchpairs = set()
 
