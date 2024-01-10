@@ -13,7 +13,9 @@
         <div id ='introdiv' class ="introdiv" onclick="location.href='index.html'">
             <h1 class="title" >
                 <br></br>
-                Computational estimation of the impact of mutations on protein-ligand affinity based on Alphafold and MD simulation
+                ProMI: A computational workflow for estimation of amino
+                acid mutations impact on protein-ligand affinity based on
+                AlphaFold2 and MD simulation
             </h1>
             <h2 class="subtitle" >
                 University of Pisa
@@ -24,11 +26,24 @@
                 Result
             </h1>
             <h2 style="margin-bottom: 50px;">
-                Results of 5 simulations for each protein (both AlphaFold predicted and crystallographic structures)
+                Ground truth and calculated &Delta;&Delta;G value. 
             </h2>
-            <object data="result.pdf" type="application/pdf" width="1000vw" height="1000vw" style="background-color: white;">
-                <p>Unable to display PDF file. <a href="result.pdf">Download</a> instead.</p>
-              </object>
+            <img src="ddg.jpg" width="1000" height="450">
+
+            <h2 style="margin-bottom: 50px;">
+                Confusion matrix 
+            </h2>
+            <img src="confusionmatrix.jpg" width="550" height="450">
+
+
+            <h2 style="margin-bottom: 50px;">
+                Simulation result
+            </h2>
+            <p style="margin-left: 5%; margin-right: 5%; text-align: center; margin-top: 20px;">
+                Results of 5 simulations for each protein (both AlphaFold predicted and 
+                crystallographic structures) is available at: 
+                <a href="simulationres.html">this link</a>
+            </p>
             
         </div>
     </body>

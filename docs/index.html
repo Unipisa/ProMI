@@ -15,7 +15,9 @@
         <div id ='introdiv' class ="introdiv" onclick="location.href='index.html'">
             <h1 class="title" >
                 <br></br>
-                Computational estimation of the impact of mutations on protein-ligand affinity based on Alphafold and MD simulation
+                ProMI: A computational workflow for estimation of amino
+                acid mutations impact on protein-ligand affinity based on
+                AlphaFold2 and MD simulation
             </h1>
             <h2 class="subtitle" >
                 University of Pisa
@@ -64,20 +66,37 @@
                 Abstract
             </h1>
             <p style="font-size: 24px; text-align: justify; margin-left: 5%; margin-right: 5%;">
-                Proteins are frequently affected by mutations with consequences on their structure’s stability, 
-                functionality, and binding affinity towards ligands, with important biological effects. 
-                Molecular Dynamics Simulation (MDS) is an effective tool for predicting <i>in silico</i>
-                the binding affinity changes upon aminoacidic mutations. 
-                An essential element for this analysis is the availability of the three-dimensional 
-                structures of the wild-type (wt) and mutated protein isoforms. Until now, crystallographic 
-                structures have been mostly used. Recently, AlphaFold2 allows protein structure predictions 
-                to be made with high model accuracy. In this study, a computational workflow to compute the 
-                difference in the binding free energy between the wt and the mutated protein using AlphaFold2 
-                is proposed. The workflow consists in generating the AlphaFold models for the wt and mutated 
-                proteins, and studying their interaction with ligands using MDS in order to calculate the 
-                difference in binding free energy and infer the mutation effect on binding affinity. 
-                The workflow is validated through results obtained by using crystallographic structures on a 
-                benchmark constistued by 15 mutant proteins.
+            <b>Background:</b> Proteins are frequently affected by mutations with consequences on 
+            their structure’s stability, functionality, and binding affinity towards ligands, 
+            with important biological effects. Molecular Dynamics Simulation (MDS) is one of 
+            the most effective tools to in silico predict the binding affinity changes upon 
+            aminoacidic mutations. A fundamental requirement to conduct this analysis is the 
+            availability of the three-dimensional structures of the wild-type (wt) and mutated 
+            protein isoforms. Until now, crystallographic models have been mostly used. Recently, 
+            with the development of AlphaFold2, protein structure predictions with high model 
+            accuracy are possible. In this study, an automated computational workflow to compute 
+            the difference in the binding free energy between the wt and the mutated protein using 
+            AlphaFold2 is proposed. The workflow consists of generating the AlphaFold models for 
+            the wt and mutated proteins and studying their interaction with ligands using MDS to 
+            calculate the difference in binding free energy and infer the mutation effect on binding 
+            affinity. To evaluate the workflow confidence, two accuracy predictors are proposed: 
+            the distance between computed affinities of mutant and wt proteins 
+            (i.e. &Delta;&Delta;G = |&Delta; G <sub>mutant</sub> - &Delta; G<sub>wt</sub>|), and an accuracy 
+            evaluation of the wt proteins models predicted with AlphaFold2 based on the analysis 
+            of side chains orientation. <br>
+            <b>Results: </b>We observed how AlphaFold’s models coupled with MDS can be used in 
+            binding affinity measurements with an accuracy comparable to that obtained by using 
+            crystallographic structures. The workflow is validated through results obtained by using 
+            crystallographic structures on a benchmark constituted by proteins in complexes with 
+            small ligands, cofactors, and ions, with a high variability of applications. The side chains 
+            orientation parameter has been identified as an important workflow confidence 
+            estimator because, even though the high accuracy of AlphaFold2 predictions, side 
+            chains orientation in predicted wt proteins can significantly differ from the 
+            crystallographic models, with considerable effects on binding affinity calculations. <br>
+            <b>Conclusion:</b> The proposed automated computational workflow successfully integrates 
+            AlphaFold2 with MDS for in silico predicting protein-ligand binding affinity. Thus, 
+            AlphaFold’s models can be beneficial in studying the effect of mutations on binding 
+            affinity even for proteins with unavailable crystallographic structures. 
             </p>
         </div>
     </body>
