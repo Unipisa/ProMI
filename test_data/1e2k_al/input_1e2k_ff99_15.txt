@@ -17,6 +17,6 @@ p_name				= NA
 # Negative charge name
 n_name				= CL
 # number of simulation steps, this determines the time of the simulation time (ns) = sim_step*0.002/1000 
-sim_step				= 7500000
+sim_step				= 750000
 # data directory
 data_dir 			= /data/genetic_databases/
