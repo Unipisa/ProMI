@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Code</title>
+        <title>Use</title>
         <link rel="stylesheet" href="style.css">
         <!-- <script src="lib/d3.js"></script> -->
     </head>
 
     <body>
         <div id ='introdiv' class ="introdiv" onclick="location.href='index.html'">
-            <h1 class="title" >
+            <h1 class="title" style = "margin-left: 20%; margin-right: 20%;">
                 <br></br>
                 ProMI: A computational workflow for estimation of amino
                 acid mutations impact on protein-ligand affinity based on
@@ -23,33 +23,122 @@
         </div>
         <div>
             <h1 class ="section" >
-                Code
+                How to use the workflow
             </h1>    
         </div>
         <div>
-            <h2 style="margin-left: 5%; margin-right: 5%; text-align: center;">
-                Docker images: three docker images are needed to run the workflow
+            <h2 style="margin-left: 20%; margin-right: 20%; text-align: justify;">
+                Requirement:
             </h2>
-            <p style="margin-left: 5%; margin-right: 5%; text-align: center; margin-top: 20px;">
-                Docker image for the worklfow: 
-                <a href="https://hub.docker.com/repository/docker/giangpth/mpli/general">link</a>
+            <p style="margin-left: 20%; margin-right: 20%; text-align: justify; margin-top: 20px;">
+                - The workflow requires 3 docker images, source code of the workflow and source code to run AlphaFold. 
                 <br></br>
-                Docker image for AlphaFold (the comparetible version with the workflow): 
-                <a href="https://hub.docker.com/repository/docker/giangpth/mpli/general">link</a>
+                - The workflow is developed by python hence it also requires python and common package like numpy. 
                 <br></br>
-                Docker image for Acpype (the comparetible version with the workflow): 
-                <a href="https://hub.docker.com/repository/docker/giangpth/mpli/general">link</a>
+                - To use AlphaFold, it is also necessary to download the database. 
+                <br></br>
+                - 4 input files are required: wt crystallographic model (.pdb format), 
+                input file and mutation file follow a predefine template and the FASTA file of the wt protein.
+                <br></br>
+                - Note: The workflow can take longer than an ssh session, so it is suggested to run with a screen or tmux session.  
                 <br></br>
             </p>
         </div>
         <div>
-            <h2 style="margin-left: 5%; margin-right: 5%; text-align: center;">
+            <h2 style="margin-left: 20%; margin-right: 20%; text-align: justify;">
+                Docker images: 
+            </h2>
+            <p style="margin-left: 20%; margin-right: 20%; text-align: justify; margin-top: 20px;">
+                - Docker image for the worklfow: 
+                <a href="https://hub.docker.com/repository/docker/giangpth/mpli/general">link</a>
+                <br></br>
+                - Docker image for AlphaFold (the compatible version with the workflow): 
+                <a href="https://hub.docker.com/repository/docker/giangpth/promialphafold/general">link</a>
+                <br></br>
+                - Docker image for Acpype (the compatible version with the workflow): 
+                <a href="https://hub.docker.com/repository/docker/giangpth/promiacpype/general">link</a>
+                <br></br>
+            </p>
+        </div>
+        <div>
+            <h2 style="margin-left: 20%; margin-right: 20%; text-align: justify;">
                 Source code for the workflow:
             </h2>
-            <p style="margin-left: 5%; margin-right: 5%; text-align: center; margin-top: 20px;">
-                The source code needed to run the workflow is available at: 
-                <a href="https://github.com/Unipisa/mpl-affinity-wf">git hub repository</a>
+            <p style="margin-left: 20%; margin-right: 20%; text-align: justify; margin-top: 20px;">
+                - The source code needed to run the workflow is available at: 
+                <a href="https://github.com/Unipisa/ProMI">ProMI repository</a>
+                <br></br>
             </p>
+        </div>
+        <div>
+            <h2 style="margin-left: 20%; margin-right: 20%; text-align: justify;">
+                Instruction:
+            </h2>
+            <p style="margin-left: 20%; margin-right: 20%; text-align: justify; margin-top: 20px;">
+                - Down load the database of AlphaFold as instruction at: 
+                <a href="https://github.com/google-deepmind/alphafold">AlphaFold repository</a>
+                <br></br>
+                - Clone the github repository of the source code and decompress alphafold folder (named alphafold.tar.gz)
+                <br></br>
+                - Prepare the input files: The wt crystallographic structure and the FASTA file of wt protein can be downloaded at: 
+                <a href="https://www.rcsb.org">Protein data bank</a>
+                <br></br>
+                - Input file template: in which lines start with "#" are instruction; data_dir is the path to the folder contains AlphaFold database <br></br>
+                <code class="inlinecode">
+                    # type of protein, can only be one of the following: mono<br></br>
+                    type 				= mono<br></br>
+                    # number of chain<br></br>
+                    num_chain 			= 1<br></br>
+                    # force field family, only support amber at this moment <br></br>
+                    ff 					= amber<br></br>
+                    # name of ligand of interest, modifty to the name of ligand <br></br>
+                    lig 					= TMC<br></br>
+                    # name of the force field, choose between: amber03, amber94, amber96, amber99, 
+                    amber99sb, amber99sb-ildn, ambergs<br></br>
+                    ff_name				= amber99<br></br>
+                    # name of the water model <br></br>
+                    water 				= tip3p<br></br>
+                    # box type, choose between: triclinic, cubic, dodecahedron, octahedron<br></br>
+                    bt		 			= dodecahedron<br></br>
+                    # Positive charge name <br></br>
+                    p_name				= NA<br></br>
+                    # Negative charge name<br></br>
+                    n_name				= CL<br></br>
+                    # number of simulation steps, this determines 
+                    the time of the simulation time (ns) = sim_step*0.002/1000 <br></br>
+                    sim_step				= 2000000<br></br>
+                    # data directory for AlphaFold, set to the absolute path<br></br>
+                    data_dir 			= /data/genetic_databases/<br></br>
+                </code>
+                - Mutation file template: each line corresponds to a mutant protein. 
+                Keyword "point" indicate point mutation. Each point mutation follow the format 
+                [chain-id]_[original amino acid][position of amino acid][new amino acid].
+                For multiple points mutation, separate each mutation by a comma.
+                Remember to list an identical mutation for the wt structure<br></br>
+                <code class="inlinecode">
+                    point: 1_Y56F <br></br>
+                    point: 1_Y56Y
+                </code>
+                <br></br>
+                - Command to run the workflow:<br></br>
+                <code class="inlinecode">
+                    python3 pythonScript/workflowmut.py -i [path to the input file] 
+                    -f [path to the wt FASTA file] -m [path to the mutation file] 
+                    -p [path to the wt crystallographic file] -a [path to alphafold folder] 
+                    -l [name of the acpype docker image] -c [name of the workflow docker image] 
+                    -w [path to the output folder] -n [number of simulations for each protein] 
+                </code>
+                <br></br>
+                - An example command to run the workflow (the flag -d is for debug mode)<br></br>
+                <code class="inlinecode">
+                    python3 pythonScript/workflowmut.py -i test_data/1e2k/input_1e2k_ff99.txt 
+                    -f test_data/1e2k/rcsb_pdb_1E2K.fasta -m test_data/1e2k/mutations_1e2k.txt 
+                    -p test_data/1e2k/1e2k.pdb -a /home/t.pham1/alphafold 
+                    -l acpype/acpype -c mpli -w /home/t.pham1/workspace/scripts/test_res 
+                    -n 2 -d
+                </code>
+            </p>
+            
         </div>
     </body>
 </html>
