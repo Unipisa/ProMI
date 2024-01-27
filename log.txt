@@ -1,0 +1,16 @@
+
+
+
+WORKING WITH 1E2K
+Root directory is /Users/giangpth/Study/MPL/test_res/1e2k
+{'type': 'mono', 'ff': 'amber', 'num_chain': 1, 'lig': 'TMC', 'ff_name': 'amber99', 'water': 'tip3p', 'bt': 'dodecahedron', 'p_name': 'NA', 'n_name': 'CL', 'sim_step': '2000000', 'data_dir': '/data/genetic_databases/'}
+
+
+
+Y F
+Y F
+Y56F is the mutant
+Mean of mutant -36.42
+Y56Y is the wt
+Mean of wt is -37.040000000000006
+CLEAN UP

@@ -138,7 +138,33 @@
                     -n 2 -d
                 </code>
             </p>
-            
+            <br></br>
+            <h2 style="margin-left: 20%; margin-right: 20%; text-align: justify;">
+                Advanced configuration:
+            </h2>
+            <p style="margin-left: 20%; margin-right: 20%; text-align: justify; margin-top: 20px;">
+                - To modify the default configuration of the MD simulation, 
+                users can modify the GROMACS ".mpd" files in folder "pythonScript/data".
+                <br></br>
+                - It is also possible to modify the parameters for 
+                gmx_MMPBSA by modifying the file "mmpbsa.in" in "pythonScript/data" folder.
+                <br></br>
+            </p>
+            <h2 style="margin-left: 20%; margin-right: 20%; text-align: justify;">
+                Output:
+            </h2>
+            <p style="margin-left: 20%; margin-right: 20%; text-align: justify; margin-top: 20px;">
+                - The output will be generated in a folder with the name of the wt protein. 
+                <br></br>
+                - The general output named "PROMI_OUTPUT.txt" can be found inside this folder 
+                which contains the information of: 
+                the binding free energy of all the simulation for wt and mutant proteins;
+                the average bindig free energy of each protein w.r.t the relative variance threshold of 0.05;
+                the confidence of the prediction.
+                <br></br>
+                - Users can find more detail about the AlphaFold's prediction result, 
+                simulation result for each protein inside each subfolder of each protein. 
+            </p>
         </div>
     </body>
 </html>

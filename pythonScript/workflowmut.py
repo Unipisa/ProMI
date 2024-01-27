@@ -4,6 +4,8 @@ import sys
 import os
 import subprocess
 from genMutation import parseMutationFile, readFasta, genRangeMutations 
+import re
+import math
 
 def parseAgruments():
     parser = ap.ArgumentParser(description='Run MD simulation  \
@@ -364,6 +366,138 @@ def runMDBatch(rootpath, image, time = 1, debug=False):
     if debug:
         print('\n\n')
 
+# check wt 
+def parseMut(mut):
+    poss = re.findall(r'\d+', mut)
+    for pos in poss:
+        idx = mut.find(pos)
+        # print(idx) 
+        if idx > 0:
+            if mut[idx-1] != mut[idx+len(pos)]:
+                print(mut[idx-1], mut[idx+len(pos)])
+                return False
+        else:
+            return False
+    return True
+
+def calConf(ddg, wtrmsd, mutrmsd):
+    c1 = 1 - 0.363*math.exp(-0.435*abs(ddg))
+    c2 = 1.224*math.exp(-0.255*(wtrmsd + mutrmsd))
+    return (c1+c2)/2.0
+
+# path: path to the result folder of the protein. Inside there should be 
+def gatherRes(path, varthres = 0.05, debug=False):
+    if not os.path.isdir(os.path.join(path, 'md')):
+        print("Cannot find \"md\" folder")
+        return
+    else:
+        md = os.path.join(path, 'md')
+        proteins = os.scandir(md)
+        result = {}
+        rmsds = {}
+        for protein in proteins:
+            if protein.name != "Share" and protein.name[0] != '.':
+                if debug:
+                    print("Checking {}".format(protein.name))
+                proteinfol = os.path.join(md, protein.name)
+                sims = os.scandir(proteinfol)
+                ddgs = []
+                stds = []
+                for sim in sims: 
+                    if "_th" in sim.name: 
+                        if debug:
+                            print("Checking the {} simulation".format(sim))
+                        simfol = os.path.join(proteinfol, sim) 
+                        try:
+                            resfile = open(os.path.join(simfol, "FINAL_RESULTS_MMPBSA.dat"), 'r')
+                            lines = resfile.readlines()
+                            for line in lines:
+                                if "ΔTOTAL" in line:
+                                    words = line.split()
+                                    ddg = float(words[1])   
+                                    std = float(words[2])
+                                    if debug:
+                                        print("DDG of {} is {} ± {}".format(protein.name, ddg, std))
+                                    ddgs.append(ddg)
+                                    stds.append(std)
+                        except:
+                            Print("Cannot find FINAL_RESULTS_MMPBSA.dat in folder {}".format(resfile))
+                result[protein.name] = [ddgs, stds]
+
+                # now gather rmsd 
+                conf = os.path.join(proteinfol, protein.name + "_confedence.txt") 
+                try:
+                    conffile = open(conf, 'r')
+                    lines = conffile.readlines()
+                    for line in lines:
+                        if "Local RMSD sidechains:" in line:
+                            words = line.split()
+                            rmsds[protein.name] = words[3]
+                except:
+                    print("Confidence file {} not found".format(conf))
+        if debug:
+            print(result)
+            print(rmsds)
+       
+        # process writing output file
+        mutres = {}
+        wtres = None 
+        outname = os.path.join(path, "PROMI_OUTPUT.txt")
+        outfile = open(outname, 'w')
+        for key, value in result.items():
+            if parseMut(key):
+                outfile.write("Wt protein's binding free energy of " + str(len(value[0])) + " simulations\n")
+
+            else:
+                outfile.write(("Mutation " + key + " binding free energy of " + str(len(value[0])) + " simulations\n"))
+
+            maxstd = max(value[1])
+            thisddgs = value[0].copy()
+            mean = sum(thisddgs)/len(thisddgs)
+            var = 0.0
+
+            for thisddg in value[0]:
+                var += (thisddg-mean)*(thisddg-mean)
+                outfile.write(str(thisddg) + "\n")
+            outfile.write("\n")
+
+            var = math.sqrt(var)
+            var = var/abs(mean)
+
+            var = var/len(thisddgs) 
+            while var > varthres:
+                maxval = max(thisddgs)
+                thisddgs.remove(maxval)
+                mean = sum(thisddgs)/len(thisddgs)
+                var = 0.0 
+
+                for val in thisddgs:
+                    var += (val - mean)*(val-mean)
+                var = math.sqrt(var)
+                var = var/abs(mean) 
+                var = var/(len(thisddgs))  
+            
+            if parseMut(key):
+                print("{} is the wt".format(key))
+                print ("Mean of wt is {}".format(mean))
+                wtres = mean
+                wtrmsd = rmsds[key]
+            else:
+                print("{} is the mutant".format(key))
+                print("Mean of mutant {}".format(mean))
+                mutres[key] = mean 
+
+        if wtres != None:
+            outfile.write("Average binding free energy of WT: " + str(wtres) + "\n")
+            outfile.write("\n")
+        for key, value in mutres.items(): 
+            outfile.write("Average binding free energy of " + key + ":" + str(value) + "\n")
+            if wtres != None:
+                outfile.write("\tDelta G: " + str (value - wtres) + "\n")
+                outfile.write("\tConfidence: " + str (calConf(value-wtres, float(wtrmsd), float(rmsds[key]))) + "\n")
+                outfile.write("\n")
+
+
 # delete files and folder generated during running time
 def cleanup(rootpath, debug=False):
     if debug:
@@ -525,6 +659,7 @@ def main():
         if debug:
             print('\n\n')
 
+        
         # installPackages(debug)
         genMutation(args['fasta'], args['mutation'], fastapath, debug)
         predictBatch(metadic, fastapath, alphares, args['alphafold'], metadic['data_dir'], debug)
@@ -549,6 +684,8 @@ def main():
             runMDBatch(rootpath, args['docker'], (i+1), debug)
 
         # clean up 
+        
+        gatherRes(rootpath, debug)
         cleanup(rootpath, debug)
         
 if __name__ == "__main__":
