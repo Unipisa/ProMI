@@ -1,0 +1,30 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: ProMI
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Giang
+    family-names: Pham
+    email: tranhuong.giangpham@phd.unipi.it
+    affiliation: University of Pisa
+    orcid: 'https://orcid.org/0009-0001-4113-7332'
+  - given-names: Paolo
+    family-names: Milazzo
+    email: paolo.milazzo@unipi.it
+    affiliation: University of Pisa
+    orcid: 'https://orcid.org/0000-0002-7309-6424'
+repository-code: 'https://github.com/Unipisa/ProMI.git'
+url: 'https://unipisa.github.io/ProMI/'
+abstract: >-
+  A framework to calculate the binding affinity between
+  proteins and ligands using Alphafold and Molecular
+  Dynamics simulations 
+keywords:
+  - Binding Affinity
+  - Alphafold
+  - Molecular Dynamics simulation
